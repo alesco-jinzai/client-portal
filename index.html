@@ -424,7 +424,7 @@
         let fbIcon = r.feedbackMessage ? '📝' : '💬'; let fbClass = r.feedbackMessage ? 'has-note' : '';
         let safeMsg = r.feedbackMessage ? r.feedbackMessage.replace(/"/g, '&quot;') : '';
         let hoursStr = (typeof r.workHours === 'number') ? r.workHours.toFixed(2) : "0.00";
-        let chkHtml = isAppr ? `<div class="status-ok" title="${r.approverName} - ${r.approvalTimestamp}">✓ 承認済</div>` : `<input type="checkbox" class="chk-row" data-id="${r.recordId}" onchange="checkApproveReady()">`;
+        let chkHtml = isAppr ? `<div class="status-ok" title="${r.approverName} - ${r.approvalTimestamp}">✓</div>` : `<input type="checkbox" class="chk-row" data-id="${r.recordId}" onchange="checkApproveReady()">`;
 
         html += `
           <tr ${trClass}>
