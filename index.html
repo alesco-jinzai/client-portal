@@ -8,126 +8,134 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --primary: #1A365D;        /* Navy Blue sâu thẳm */
+      --primary: #1A365D;        
       --primary-light: #2B6CB0;
-      --accent: #ED8936;         /* Cam nhấn */
-      --bg: #F7FAFC;
+      --accent: #ED8936;         
+      --bg: #F4F7FC;
       --surface: #FFFFFF;
-      --text: #2D3748;
-      --border: #E2E8F0;
-      --success: #38A169;
-      --success-bg: #F0FFF4;
-      --danger: #E53E3E;
+      --text: #1A1C1E;
+      --border: #E1E3E1;
+      --success: #006E1C;
+      --success-bg: #B4F5AB;
+      --danger: #BA1A1A;
     }
     
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
     body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; height: 100vh; display: flex; flex-direction: column; overflow: hidden;}
     
-    /* --- VIEW CHUYỂN ĐỔI --- */
     .view { display: none; flex: 1; flex-direction: column; overflow: hidden; }
     .view.active { display: flex; animation: fadeIn 0.3s ease; }
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
     /* --- LOGIN UI --- */
     #viewLogin { justify-content: center; align-items: center; padding: 20px; background: linear-gradient(135deg, #1A365D 0%, #2B6CB0 100%); }
-    .login-box { background: var(--surface); padding: 40px 30px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); width: 100%; max-width: 380px; text-align: center; }
-    .login-box h1 { margin: 0 0 5px; color: var(--primary); font-size: 24px; font-weight: 700; }
-    .login-box p { margin: 0 0 25px; color: #718096; font-size: 13px; }
-    .input-group { margin-bottom: 15px; text-align: left; }
-    .input-group label { display: block; font-size: 12px; font-weight: 700; color: #4A5568; margin-bottom: 5px; }
-    .input-group input { width: 100%; padding: 12px 15px; border: 1px solid var(--border); border-radius: 6px; font-size: 15px; outline: none; transition: 0.2s; }
-    .input-group input:focus { border-color: var(--primary-light); box-shadow: 0 0 0 3px rgba(43,108,176,0.1); }
-    .btn { width: 100%; padding: 12px; border: none; border-radius: 6px; font-size: 15px; font-weight: 700; cursor: pointer; transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px; }
+    .login-box { background: var(--surface); padding: 40px 30px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); width: 100%; max-width: 400px; text-align: center; }
+    .login-box h1 { margin: 0 0 5px; color: var(--primary); font-size: 24px; font-weight: 700; letter-spacing: 2px;}
+    .login-box p { margin: 0 0 25px; color: #718096; font-size: 13px; font-weight: bold;}
+    .input-group { margin-bottom: 20px; text-align: left; }
+    .input-group label { display: block; font-size: 12px; font-weight: 700; color: #4A5568; margin-bottom: 8px; }
+    .input-group input { width: 100%; height: 50px; padding: 0 15px; border: 1px solid var(--border); border-radius: 8px; font-size: 15px; outline: none; transition: 0.2s; background: #F8FAFC;}
+    .input-group input:focus { border-color: var(--primary-light); background: #FFF; box-shadow: 0 0 0 3px rgba(43,108,176,0.1); }
+    
+    .btn { height: 48px; width: 100%; border: none; border-radius: 8px; font-size: 15px; font-weight: 700; cursor: pointer; transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px; }
     .btn-primary { background: var(--primary); color: white; }
     .btn-primary:hover { background: var(--primary-light); }
     .btn-accent { background: var(--accent); color: white; }
     .btn-accent:hover { background: #DD6B20; }
     .btn-outline { background: transparent; border: 1px solid var(--border); color: #4A5568; }
+    .btn-outline:hover { background: #F8FAFC; }
     .btn:disabled { opacity: 0.6; cursor: not-allowed; }
 
     /* --- DASHBOARD HEADER --- */
-    .top-nav { background: var(--surface); height: 60px; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); z-index: 10; flex-shrink: 0; }
-    .client-title { font-size: 16px; font-weight: 700; color: var(--primary); }
-    .nav-actions { display: flex; gap: 10px; }
-    .btn-sm { padding: 6px 12px; font-size: 12px; height: 32px; border-radius: 4px; }
+    .top-nav { background: var(--surface); height: 64px; display: flex; justify-content: space-between; align-items: center; padding: 0 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); z-index: 10; flex-shrink: 0; }
+    .client-title { font-size: 18px; font-weight: 700; color: var(--primary); }
+    .nav-actions { display: flex; gap: 12px; }
+    .btn-sm { height: 36px; padding: 0 16px; font-size: 13px; width: auto; }
 
-    /* --- DASHBOARD LAYOUT (PC & Mobile) --- */
-    .dashboard-container { display: flex; flex: 1; overflow: hidden; padding: 15px; gap: 15px; flex-direction: column; }
+    /* --- DASHBOARD LAYOUT --- */
+    .dashboard-container { display: flex; flex: 1; overflow: hidden; padding: 20px; gap: 20px; flex-direction: column; }
     @media (min-width: 768px) { .dashboard-container { flex-direction: row; } }
     
-    .sidebar { background: var(--surface); border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.03); padding: 20px; display: flex; flex-direction: column; gap: 20px; overflow-y: auto; }
-    @media (min-width: 768px) { .sidebar { width: 280px; flex-shrink: 0; } }
+    .sidebar { background: var(--surface); border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.03); padding: 20px; display: flex; flex-direction: column; gap: 20px; overflow-y: auto; border: 1px solid var(--border);}
+    @media (min-width: 768px) { .sidebar { width: 300px; flex-shrink: 0; } }
 
-    .main-area { background: var(--surface); border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.03); flex: 1; display: flex; flex-direction: column; overflow: hidden; position: relative; }
+    .main-area { background: var(--surface); border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.03); flex: 1; display: flex; flex-direction: column; overflow: hidden; position: relative; border: 1px solid var(--border);}
 
     /* --- SIDEBAR CONTROLS --- */
-    .control-box { border-bottom: 1px solid var(--border); padding-bottom: 15px; }
+    .control-box { border-bottom: 1px solid var(--border); padding-bottom: 20px; }
     .control-box:last-child { border-bottom: none; padding-bottom: 0; }
-    .control-box h3 { font-size: 13px; color: #718096; margin: 0 0 10px 0; text-transform: uppercase; }
-    .month-picker { display: flex; align-items: center; justify-content: space-between; background: var(--bg); padding: 5px; border-radius: 6px; border: 1px solid var(--border); }
-    .month-btn { background: none; border: none; font-size: 18px; color: var(--primary); cursor: pointer; padding: 5px 15px; }
-    #lblMonth { font-weight: 700; font-size: 15px; }
+    .control-box h3 { font-size: 13px; color: #718096; margin: 0 0 12px 0; font-weight: bold;}
+    .month-picker { display: flex; align-items: center; justify-content: space-between; background: var(--bg); padding: 5px; border-radius: 8px; border: 1px solid var(--border); height: 48px;}
+    .month-btn { background: none; border: none; font-size: 18px; color: var(--primary); cursor: pointer; padding: 0 15px; height: 100%;}
+    #lblMonth { font-weight: 700; font-size: 16px; }
+    select.filter-sel { width: 100%; height: 48px; padding: 0 15px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg); font-size: 14px; font-weight: bold; outline: none;}
 
     /* --- APPROVAL SECTION --- */
-    .approve-panel { background: #EBF8FF; border: 1px solid #BEE3F8; border-radius: 8px; padding: 15px; }
-    .checkbox-master { display: flex; align-items: center; gap: 8px; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px dashed #BEE3F8; cursor: pointer; }
-    .checkbox-master input { transform: scale(1.3); cursor: pointer; }
-    .checkbox-master label { font-size: 13px; font-weight: 700; color: var(--primary-light); cursor: pointer; }
+    .approve-panel { background: #EBF8FF; border: 1px solid #BEE3F8; border-radius: 10px; padding: 15px; }
+    .checkbox-master { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; padding-bottom: 12px; border-bottom: 1px dashed #BEE3F8; cursor: pointer; }
+    .checkbox-master input { width: 18px; height: 18px; cursor: pointer; }
+    .checkbox-master label { font-size: 14px; font-weight: 700; color: var(--primary-light); cursor: pointer; }
+    .approve-panel input[type="text"] { width: 100%; height: 45px; padding: 0 15px; border-radius: 8px; border: 1px solid #BEE3F8; margin-bottom: 15px; font-size: 14px; outline:none;}
 
-    /* --- DATA TABLE / CARDS --- */
-    .data-scroll { flex: 1; overflow-y: auto; padding: 0; background: #fdfdfd; }
-    
+    /* --- DATA TABLE --- */
+    .data-scroll { flex: 1; overflow-y: auto; padding: 0; background: #fff; }
     table { width: 100%; border-collapse: collapse; text-align: left; }
-    th { position: sticky; top: 0; background: var(--primary); color: white; padding: 12px 10px; font-size: 13px; z-index: 2; white-space: nowrap;}
-    td { padding: 12px 10px; border-bottom: 1px solid var(--border); font-size: 14px; vertical-align: middle; }
-    tr:hover { background: #f8fafc; }
+    th { position: sticky; top: 0; background: var(--primary); color: white; padding: 15px 12px; font-size: 13px; z-index: 2; white-space: nowrap;}
+    td { padding: 15px 12px; border-bottom: 1px solid var(--border); font-size: 14px; vertical-align: middle; }
+    tr:hover { background: #F7FAFC; }
     
-    .td-check { width: 40px; text-align: center; }
-    .td-check input { transform: scale(1.3); cursor: pointer; }
+    .td-check { width: 50px; text-align: center; }
+    .td-check input { width: 18px; height: 18px; cursor: pointer; }
     
-    .status-ok { color: var(--success); font-weight: 700; font-size: 12px; display: flex; align-items: center; gap: 4px;}
-    .badge-time { background: #E2E8F0; padding: 2px 6px; border-radius: 4px; font-family: monospace; font-size: 13px; font-weight: bold;}
+    .status-ok { color: var(--success); font-weight: 700; font-size: 12px; display: inline-flex; align-items: center; justify-content: center; gap: 4px; background: var(--success-bg); padding: 4px 10px; border-radius: 20px;}
+    .badge-time { background: #EDF2F7; padding: 4px 8px; border-radius: 6px; font-family: monospace; font-size: 14px; font-weight: bold; color: #4A5568;}
     
-    .feedback-icon { font-size: 18px; cursor: pointer; filter: grayscale(1); transition: 0.2s; }
-    .feedback-icon.has-note { filter: grayscale(0); transform: scale(1.1); }
-    .feedback-icon:hover { transform: scale(1.2); }
+    .feedback-icon { font-size: 20px; cursor: pointer; filter: grayscale(1); transition: 0.2s; opacity: 0.5;}
+    .feedback-icon.has-note { filter: grayscale(0); transform: scale(1.1); opacity: 1;}
+    .feedback-icon:hover { transform: scale(1.2); opacity: 1;}
 
-    /* --- RESPONSIVE MOBILE CARDS --- */
+    /* --- MOBILE RESPONSIVE --- */
     @media (max-width: 767px) {
+      .top-nav { padding: 0 15px; }
+      .client-title { font-size: 15px; }
+      .dashboard-container { padding: 10px; gap: 10px; }
+      .sidebar { padding: 15px; }
       table, thead, tbody, th, td, tr { display: block; }
       thead { display: none; }
-      tr { border: 1px solid var(--border); border-radius: 8px; margin: 10px; padding: 12px; background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
-      td { border: none; padding: 5px 0; display: flex; justify-content: space-between; align-items: center; }
-      td::before { content: attr(data-label); font-size: 11px; color: #718096; font-weight: bold; }
-      .td-check { display: inline-block; width: auto; margin-right: 10px; }
+      tr { border: 1px solid var(--border); border-radius: 10px; margin: 10px; padding: 15px; background: white; box-shadow: 0 2px 5px rgba(0,0,0,0.04); }
+      td { border: none; padding: 6px 0; display: flex; justify-content: space-between; align-items: center; }
+      td::before { content: attr(data-label); font-size: 12px; color: #718096; font-weight: bold; }
+      .td-check { display: flex; justify-content: space-between; width: 100%; border-bottom: 1px dashed var(--border); padding-bottom: 10px; margin-bottom: 10px;}
       .td-check::before { display: none; }
-      .mobile-header { display: flex; justify-content: flex-start; align-items: center; border-bottom: 1px dashed var(--border); padding-bottom: 8px; margin-bottom: 8px; font-weight: bold; font-size: 16px; color: var(--primary);}
+      .mobile-header { font-weight: 800; font-size: 16px; color: var(--primary); }
     }
 
-    /* --- OVERLAYS & MODALS --- */
+    /* --- MODALS --- */
     .overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.6); z-index: 9999; display: none; justify-content: center; align-items: center; backdrop-filter: blur(3px); }
-    .modal { background: var(--surface); width: 90%; max-width: 400px; border-radius: 12px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
-    .modal h3 { margin: 0 0 15px 0; color: var(--primary); font-size: 18px; }
+    .modal { background: var(--surface); width: 90%; max-width: 450px; border-radius: 12px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+    .modal h3 { margin: 0 0 15px 0; color: var(--primary); font-size: 20px; font-weight: bold;}
+    textarea { width: 100%; padding: 15px; border: 1px solid var(--border); border-radius: 8px; resize: vertical; min-height: 100px; font-family: inherit; font-size: 14px; outline: none;}
+    textarea:focus { border-color: var(--primary-light); }
     
     #loading { flex-direction: column; color: white; font-weight: bold; z-index: 10000; }
-    .spinner { border: 4px solid rgba(255,255,255,0.3); border-top: 4px solid white; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin-bottom: 15px; }
+    .spinner { border: 4px solid rgba(255,255,255,0.3); border-top: 4px solid white; border-radius: 50%; width: 48px; height: 48px; animation: spin 1s linear infinite; margin-bottom: 15px; }
     @keyframes spin { 100% { transform: rotate(360deg); } }
   </style>
 </head>
 <body>
 
-  <!-- LOADING SPINNER -->
+  <!-- LOADING -->
   <div id="loading" class="overlay">
     <div class="spinner"></div>
-    <div id="loadingText">読み込み中...</div>
+    <div id="loadingText" style="font-size: 15px; letter-spacing: 1px;">読み込み中...</div>
   </div>
 
-  <!-- VIEW 1: ĐĂNG NHẬP -->
+  <!-- VIEW: LOGIN -->
   <div id="viewLogin" class="view active">
     <div class="login-box">
       <h1>ALESCO</h1>
-      <p>クライアントポータル</p>
-      <div id="loginError" style="color:var(--danger); font-size:13px; font-weight:bold; margin-bottom:15px; display:none;"></div>
+      <p>クライアント・ポータル V3.0</p>
+      <div id="loginError" style="color:var(--danger); font-size:13px; font-weight:bold; margin-bottom:15px; display:none; padding:10px; background:#FFF5F5; border-radius:6px;"></div>
       <div class="input-group">
         <label>ログインID</label>
         <input type="text" id="inpLoginId" placeholder="IDを入力">
@@ -136,11 +144,11 @@
         <label>パスワード</label>
         <input type="password" id="inpLoginPass" placeholder="パスワードを入力">
       </div>
-      <button class="btn btn-primary" style="margin-top:25px;" onclick="doLogin()">ログイン</button>
+      <button class="btn btn-primary" style="margin-top:10px;" onclick="doLogin()">ログイン</button>
     </div>
   </div>
 
-  <!-- VIEW 2: DASHBOARD CHÍNH -->
+  <!-- VIEW: DASHBOARD -->
   <div id="viewDashboard" class="view">
     <div class="top-nav">
       <div class="client-title"><span id="txtClientName">---</span> 様</div>
@@ -154,7 +162,6 @@
       
       <!-- BỘ LỌC BÊN TRÁI -->
       <div class="sidebar">
-        
         <div class="control-box">
           <h3>対象月</h3>
           <div class="month-picker">
@@ -166,29 +173,25 @@
 
         <div class="control-box">
           <h3>勤務地絞り込み</h3>
-          <select id="selLocation" onchange="renderTable()" style="margin:0; height: 40px;"></select>
+          <select id="selLocation" class="filter-sel" onchange="renderTable()"></select>
         </div>
 
         <div class="control-box approve-panel">
           <h3 style="color:var(--primary-light);">一括承認</h3>
-          
           <label class="checkbox-master">
             <input type="checkbox" id="chkSelectAll" onchange="toggleSelectAll()">
             <span>表示中の未承認をすべて選択</span>
           </label>
-
-          <div style="font-size:12px; margin-bottom:8px; font-weight:bold;">承認者名を入力：</div>
-          <input type="text" id="inpApprover" placeholder="例: 山田 太郎" oninput="checkApproveReady()" style="margin-bottom:15px; height: 40px;">
-          
+          <div style="font-size:12px; margin-bottom:8px; font-weight:bold; color:#4A5568;">承認者名を入力：</div>
+          <input type="text" id="inpApprover" placeholder="例: 山田 太郎" oninput="checkApproveReady()">
           <button id="btnApprove" class="btn btn-accent" disabled onclick="doApprove()">
             選択項目を承認 (<span id="lblApproveCount">0</span>)
           </button>
         </div>
 
         <div class="control-box">
-          <button class="btn btn-outline" style="height: 40px;" onclick="exportCSV()">📥 CSVダウンロード</button>
+          <button class="btn btn-outline" onclick="exportCSV()">📥 CSVダウンロード</button>
         </div>
-
       </div>
 
       <!-- BẢNG DỮ LIỆU BÊN PHẢI -->
@@ -211,7 +214,7 @@
               <!-- Render by JS -->
             </tbody>
           </table>
-          <div id="noDataMsg" style="display:none; text-align:center; padding: 50px 20px; color:#A0AEC0; font-weight:bold;">
+          <div id="noDataMsg" style="display:none; text-align:center; padding: 60px 20px; color:#A0AEC0; font-weight:bold; font-size:15px;">
             該当するデータがありません。
           </div>
         </div>
@@ -220,16 +223,16 @@
     </div>
   </div>
 
-  <!-- MODAL: GHI CHÚ (FEEDBACK) -->
+  <!-- MODAL: GHI CHÚ -->
   <div id="modalFeedback" class="overlay" onclick="closeModalOutside(event, 'modalFeedback')">
     <div class="modal">
       <h3>連絡事項</h3>
       <p style="font-size:13px; color:#718096; margin-bottom:15px;">アレスコへの連絡事項があれば入力してください。（遅刻・早退・シフト変更など）</p>
       <textarea id="inpFeedback" placeholder="入力してください..."></textarea>
       <input type="hidden" id="hdnRecordId">
-      <div style="display:flex; gap:10px; margin-top:20px;">
+      <div style="display:flex; gap:12px; margin-top:20px;">
         <button class="btn btn-outline" onclick="closeModal('modalFeedback')">キャンセル</button>
-        <button class="btn btn-primary" onclick="saveFeedback()">保存する</button>
+        <button id="btnSaveFeedback" class="btn btn-primary" onclick="saveFeedback()">保存する</button>
       </div>
     </div>
   </div>
@@ -238,7 +241,7 @@
   <div id="modalPass" class="overlay" onclick="closeModalOutside(event, 'modalPass')">
     <div class="modal">
       <h3>パスワード変更</h3>
-      <div id="errPass" style="color:var(--danger); font-size:12px; margin-bottom:10px; display:none;"></div>
+      <div id="errPass" style="color:var(--danger); font-size:13px; font-weight:bold; margin-bottom:15px; display:none; padding:10px; background:#FFF5F5; border-radius:6px;"></div>
       <div class="input-group">
         <label>現在のパスワード</label>
         <input type="password" id="inpOldPass">
@@ -247,7 +250,7 @@
         <label>新しいパスワード</label>
         <input type="password" id="inpNewPass">
       </div>
-      <div style="display:flex; gap:10px; margin-top:25px;">
+      <div style="display:flex; gap:12px; margin-top:25px;">
         <button class="btn btn-outline" onclick="closeModal('modalPass')">キャンセル</button>
         <button class="btn btn-primary" onclick="doChangePass()">変更する</button>
       </div>
@@ -258,17 +261,15 @@
     // =========================================
     // THIẾT LẬP KẾT NỐI API
     // =========================================
-    // 👉 THAY LINK APP CỦA ÔNG VÀO ĐÂY (Lấy từ Deploy của file ClientAPI.gs)
+    // 👉 ĐIỀN LINK WEB APP CỦA ÔNG VÀO ĐÂY:
     const GAS_API_URL = "https://script.google.com/macros/s/AKfycbwEy1ArOJjCE4joiEErl33EjMgH_4tcQc-5BYD8DVzvyBnDZSiqwIu2e0HbcS2FGPlB/exec"; 
 
-    // Biến toàn cục
     let clientToken = sessionStorage.getItem('alescoClientToken');
     let clientName = sessionStorage.getItem('alescoClientName');
     let currentData = [];
     let currentYear = new Date().getFullYear();
     let currentMonth = new Date().getMonth() + 1;
 
-    // Khởi động
     document.addEventListener("DOMContentLoaded", () => {
       if (clientToken) {
         showView('viewDashboard');
@@ -280,9 +281,6 @@
       }
     });
 
-    // =========================================
-    // CORE FUNCTIONS (API Callers)
-    // =========================================
     function callAPI(action, params = [], loadingMsg = "処理中...") {
       return new Promise((resolve, reject) => {
         showLoading(true, loadingMsg);
@@ -319,10 +317,6 @@
       document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
       document.getElementById(id).classList.add('active');
     }
-
-    // =========================================
-    // LUỒNG CHỨC NĂNG NGHIỆP VỤ
-    // =========================================
 
     async function doLogin() {
       const id = document.getElementById('inpLoginId').value.trim();
@@ -374,7 +368,6 @@
       if (res.result && res.result.success) {
         currentData = res.result.data;
         
-        // Render Cửa hàng Filter
         const sel = document.getElementById('selLocation');
         const oldLoc = sel.value;
         sel.innerHTML = '<option value="ALL">すべて表示</option>';
@@ -403,12 +396,13 @@
         let isAppr = r.isApproved;
         let trClass = isAppr ? 'style="background:#F7FAFC; color:#A0AEC0;"' : '';
         
-        // Icon phản hồi
         let fbIcon = r.feedbackMessage ? '📝' : '💬';
         let fbClass = r.feedbackMessage ? 'has-note' : '';
         let safeMsg = r.feedbackMessage ? r.feedbackMessage.replace(/"/g, '&quot;') : '';
 
-        // Checkbox duyệt
+        // ĐÃ VÁ LỖI HIỂN THỊ workHours (Nếu lỗi thì trả về 0.00 thay vì null)
+        let hoursStr = (typeof r.workHours === 'number') ? r.workHours.toFixed(2) : "0.00";
+
         let chkHtml = isAppr 
           ? `<div class="status-ok" title="${r.approverName} - ${r.approvalTimestamp}">✓ 承認済</div>`
           : `<input type="checkbox" class="chk-row" data-id="${r.recordId}" onchange="checkApproveReady()">`;
@@ -419,11 +413,11 @@
                <div class="mobile-header">${r.empName}</div>
                ${chkHtml}
             </td>
-            <td data-label="日付">${r.date}</td>
+            <td data-label="日付"><strong>${r.date}</strong></td>
             <td data-label="勤務地">${r.locationName}</td>
             <td data-label="スタッフ名"><strong>${r.empName}</strong></td>
             <td data-label="出退勤"><span class="badge-time">${r.checkIn}</span> ~ <span class="badge-time">${r.checkOut}</span></td>
-            <td data-label="実働"><strong>${r.workHours.toFixed(2)} h</strong></td>
+            <td data-label="実働"><strong>${hoursStr} h</strong></td>
             <td data-label="交通費">¥${r.transportCost.toLocaleString()}</td>
             <td data-label="連絡" style="text-align:center;">
                <span class="feedback-icon ${fbClass}" onclick="openFeedback('${r.recordId}', '${safeMsg}', ${isAppr})" title="連絡事項">${fbIcon}</span>
@@ -435,9 +429,6 @@
       checkApproveReady();
     }
 
-    // =========================================
-    // LOGIC DUYỆT CA (BẢN VÁ LỖI HIỂN THỊ CHỮ)
-    // =========================================
     function toggleSelectAll() {
       const isChecked = document.getElementById('chkSelectAll').checked;
       document.querySelectorAll('.chk-row').forEach(cb => cb.checked = isChecked);
@@ -463,28 +454,20 @@
       const res = await callAPI("saveClientApproval", [ids, name], "承認処理中...");
       if (res.result && res.result.success) {
         alert("承認が完了しました。");
-        // Giữ nguyên ô nhập tên, reset lại checkbox
         document.getElementById('chkSelectAll').checked = false;
-        fetchData(); // Tải lại data để bảng chuyển sang xanh
+        fetchData(); 
       } else {
         alert("エラー: " + (res.result ? res.result.message : "不明なエラー"));
       }
     }
 
-    // =========================================
-    // LOGIC GHI CHÚ
-    // =========================================
     function openFeedback(id, msg, isApproved) {
       document.getElementById('hdnRecordId').value = id;
       document.getElementById('inpFeedback').value = msg;
       document.getElementById('inpFeedback').disabled = isApproved;
       
-      const btn = document.querySelector('#modalFeedback .btn-primary');
-      if (isApproved) {
-        btn.style.display = 'none'; // Đã duyệt thì không cho sửa nữa
-      } else {
-        btn.style.display = 'block';
-      }
+      const btn = document.getElementById('btnSaveFeedback');
+      btn.style.display = isApproved ? 'none' : 'flex';
       showModal('modalFeedback');
     }
 
@@ -501,9 +484,6 @@
       }
     }
 
-    // =========================================
-    // LOGIC ĐỔI MẬT KHẨU
-    // =========================================
     async function doChangePass() {
       const oldP = document.getElementById('inpOldPass').value.trim();
       const newP = document.getElementById('inpNewPass').value.trim();
@@ -524,9 +504,6 @@
       }
     }
 
-    // =========================================
-    // XUẤT CSV
-    // =========================================
     function exportCSV() {
       const locFilter = document.getElementById('selLocation').value;
       const filtered = currentData.filter(r => locFilter === 'ALL' || r.locationName === locFilter);
@@ -537,7 +514,8 @@
         let name = `"${r.empName.replace(/"/g, '""')}"`;
         let loc = `"${r.locationName.replace(/"/g, '""')}"`;
         let fb = `"${r.feedbackMessage.replace(/"/g, '""')}"`;
-        csv += `${name},${r.date},${loc},${r.checkIn},${r.checkOut},${r.workHours.toFixed(2)},${r.transportCost},${fb}\n`;
+        let hoursStr = (typeof r.workHours === 'number') ? r.workHours.toFixed(2) : "0.00";
+        csv += `${name},${r.date},${loc},${r.checkIn},${r.checkOut},${hoursStr},${r.transportCost},${fb}\n`;
       });
 
       const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
@@ -548,12 +526,7 @@
       a.click();
     }
 
-    // =========================================
-    // UTILS
-    // =========================================
-    function showModal(id) {
-      document.getElementById(id).style.display = 'flex';
-    }
+    function showModal(id) { document.getElementById(id).style.display = 'flex'; }
     function closeModal(id) {
       document.getElementById(id).style.display = 'none';
       if (id === 'modalPass') {
@@ -562,9 +535,7 @@
         document.getElementById('errPass').style.display = 'none';
       }
     }
-    function closeModalOutside(e, id) {
-      if (e.target.id === id) closeModal(id);
-    }
+    function closeModalOutside(e, id) { if (e.target.id === id) closeModal(id); }
   </script>
 </body>
 </html>
