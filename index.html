@@ -120,6 +120,35 @@
     #loading { flex-direction: column; color: white; font-weight: bold; z-index: 10000; }
     .spinner { border: 4px solid rgba(255,255,255,0.3); border-top: 4px solid white; border-radius: 50%; width: 48px; height: 48px; animation: spin 1s linear infinite; margin-bottom: 15px; }
     @keyframes spin { 100% { transform: rotate(360deg); } }
+
+    /* --- FOOTER LOGIN --- */
+    .site-footer {
+        margin-top: 30px;
+        text-align: center;
+        color: #A0AEC0; /* Màu xám sáng, hợp với nền tối */
+        font-size: 12px;
+        line-height: 1.6;
+    }
+    .site-footer a {
+        color: #E2E8F0; /* Link màu trắng xám */
+        text-decoration: none;
+        font-weight: 700;
+        transition: 0.2s;
+    }
+    .site-footer a:hover {
+        color: var(--accent); /* Rê chuột vào sẽ đổi sang màu Cam */
+    }
+    .site-footer a[href^="tel"] {
+        color: #63B3ED; /* SĐT màu xanh sáng để kích thích bấm gọi */
+        font-weight: bold;
+        font-size: 14px;
+    }
+    /* Logo ALESCO */
+    .login-logo {
+        width: 160px; /* Độ to của logo */
+        margin-bottom: 15px;
+    }
+    
   </style>
 </head>
 <body>
@@ -132,10 +161,15 @@
 
   <!-- VIEW: LOGIN -->
   <div id="viewLogin" class="view active">
+    
+    <!-- BOX ĐĂNG NHẬP CHÍNH -->
     <div class="login-box">
-      <h1>ALESCO</h1>
+      <!-- Thay chữ ALESCO bằng hình ảnh Logo -->
+      <img src="logo.png" alt="ALESCO" class="login-logo" onerror="this.src='https://alesco-v.co.jp/wp/wp-content/uploads/ALESCO-LOGO.png'">
       <p>クライアント・ポータル V3.0</p>
+      
       <div id="loginError" style="color:var(--danger); font-size:13px; font-weight:bold; margin-bottom:15px; display:none; padding:10px; background:#FFF5F5; border-radius:6px;"></div>
+      
       <div class="input-group">
         <label>ログインID</label>
         <input type="text" id="inpLoginId" placeholder="IDを入力">
@@ -146,6 +180,18 @@
       </div>
       <button class="btn btn-primary" style="margin-top:10px;" onclick="doLogin()">ログイン</button>
     </div>
+
+    <!-- FOOTER THÔNG TIN LIÊN HỆ -->
+    <div class="site-footer">
+        <p>
+            <a href="https://alesco-v.co.jp/" target="_blank" rel="noopener noreferrer"><strong>株式会社アレスコ</strong></a>
+        </p>
+        <p>
+            システムに関するお問い合わせ (9:00 - 18:00)<br>
+            <a href="tel:07031316968">📞 070-3131-6968</a>
+        </p>
+    </div>
+
   </div>
 
   <!-- VIEW: DASHBOARD -->
