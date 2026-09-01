@@ -147,6 +147,8 @@
       .td-check::before { display: none; }
       
       .mobile-header { font-weight: 800; font-size: 16px; color: var(--primary); }
+
+      .pc-only { display: none; }
     }
 
     /* --- MODALS --- */
@@ -221,32 +223,42 @@
       <!-- BỘ LỌC (SẼ BIẾN THÀNH NGĂN KÉO TRÊN MOBILE) -->
       <div class="sidebar">
         
-        <!-- Nút gập mở chỉ hiện trên Mobile -->
-        <div class="filter-drawer-btn" id="btnToggleSidebar" onclick="toggleSidebar()">
-          <span>🔍 フィルターと操作</span>
+        <!-- BỘ CHỌN THÁNG LÔI RA NGOÀI (Luôn hiển thị) -->
+        <div class="control-box" style="padding-bottom: 15px; border-bottom: none;">
+          <h3 class="pc-only">対象月</h3>
+          <div class="month-picker">
+            <button class="month-btn" onclick="changeMonth(-1)">◀</button>
+            <span id="lblMonth">----/--</span>
+            <button class="month-btn" onclick="changeMonth(1)">▶</button>
+          </div>
         </div>
 
-        <!-- Khối chứa bộ lọc -->
-        <div class="sidebar-content" id="sidebarContent">
-          <div class="control-box">
-            <h3>対象月</h3>
-            <div class="month-picker">
-              <button class="month-btn" onclick="changeMonth(-1)">◀</button>
-              <span id="lblMonth">----/--</span>
-              <button class="month-btn" onclick="changeMonth(1)">▶</button>
-            </div>
-          </div>
+        <!-- Nút gập mở chỉ hiện trên Mobile -->
+        <div class="filter-drawer-btn" id="btnToggleSidebar" onclick="toggleSidebar()">
+          <span>🔍 絞り込みと一括承認</span>
+        </div>
 
+        <!-- Khối chứa bộ lọc (Bị giấu trên Mobile) -->
+        <div class="sidebar-content" id="sidebarContent">
+          
           <div class="control-box">
             <h3>勤務地絞り込み</h3>
             <select id="selLocation" class="filter-sel" onchange="renderTable()"></select>
+          </div>
+
+          <!-- MỚI: LỌC THEO TÊN NHÂN VIÊN -->
+          <div class="control-box">
+            <h3>スタッフ名絞り込み</h3>
+            <select id="selEmployee" class="filter-sel" onchange="renderTable()">
+              <option value="ALL">すべてのスタッフ</option>
+            </select>
           </div>
 
           <div class="control-box approve-panel">
             <h3 style="color:var(--primary-light);">一括承認</h3>
             <label class="checkbox-master">
               <input type="checkbox" id="chkSelectAll" onchange="toggleSelectAll()">
-              <span>未承認をすべて選択</span>
+              <span>表示中の未承認をすべて選択</span>
             </label>
             <div style="font-size:12px; margin-bottom:8px; font-weight:bold; color:#4A5568;">承認者名を入力：</div>
             <input type="text" id="inpApprover" placeholder="例: 山田 太郎" oninput="checkApproveReady()">
@@ -458,13 +470,24 @@
       if (res.result && res.result.success) {
         currentData = res.result.data;
         
-        const sel = document.getElementById('selLocation');
-        const oldLoc = sel.value;
-        sel.innerHTML = '<option value="ALL">すべて表示</option>';
+        // 1. Cập nhật Dropdown Cửa hàng
+        const selLoc = document.getElementById('selLocation');
+        const oldLoc = selLoc.value;
+        selLoc.innerHTML = '<option value="ALL">すべて表示</option>';
         res.result.locations.sort().forEach(loc => {
-          sel.innerHTML += `<option value="${loc}">${loc}</option>`;
+          selLoc.innerHTML += `<option value="${loc}">${loc}</option>`;
         });
-        if (res.result.locations.includes(oldLoc)) sel.value = oldLoc;
+        if (res.result.locations.includes(oldLoc)) selLoc.value = oldLoc;
+
+        // 2. Cập nhật Dropdown Nhân viên (Lấy danh sách duy nhất)
+        const selEmp = document.getElementById('selEmployee');
+        const oldEmp = selEmp.value;
+        selEmp.innerHTML = '<option value="ALL">すべてのスタッフ</option>';
+        const uniqueEmps = [...new Set(currentData.map(item => item.empName))].sort();
+        uniqueEmps.forEach(emp => {
+          selEmp.innerHTML += `<option value="${emp}">${emp}</option>`;
+        });
+        if (uniqueEmps.includes(oldEmp)) selEmp.value = oldEmp;
 
         renderTable();
       }
@@ -473,9 +496,14 @@
     function renderTable() {
       const tbody = document.getElementById('tableBody');
       const locFilter = document.getElementById('selLocation').value;
+      const empFilter = document.getElementById('selEmployee').value; // Lấy giá trị lọc tên
       tbody.innerHTML = '';
       
-      const filtered = currentData.filter(r => locFilter === 'ALL' || r.locationName === locFilter);
+      // Lọc theo 2 điều kiện: Cửa hàng VÀ Tên nhân viên
+      const filtered = currentData.filter(r => 
+        (locFilter === 'ALL' || r.locationName === locFilter) &&
+        (empFilter === 'ALL' || r.empName === empFilter)
+      );
       
       document.getElementById('noDataMsg').style.display = filtered.length === 0 ? 'block' : 'none';
       document.getElementById('dataTable').style.display = filtered.length === 0 ? 'none' : 'table';
@@ -504,7 +532,6 @@
             </td>
             <td data-label="日付"><strong>${r.date}</strong></td>
             <td data-label="勤務地">${r.locationName}</td>
-            <!-- Cột tên này bị giấu trên Mobile bằng CSS -->
             <td data-label="スタッフ名" class="pc-only-name"><strong>${r.empName}</strong></td>
             <td data-label="出退勤"><span class="badge-time">${r.checkIn}</span> ~ <span class="badge-time">${r.checkOut}</span></td>
             <td data-label="実働"><strong>${hoursStr} h</strong></td>
