@@ -547,9 +547,15 @@
       checkApproveReady();
     }
 
-    // CSS nội tuyến vá lỗi giấu cột tên trên Mobile
+    // CSS nội tuyến vá lỗi hiển thị tên nhân viên (Giấu Header Mobile trên PC, và Giấu Cột Tên PC trên Mobile)
     const style = document.createElement('style');
-    style.innerHTML = `@media(max-width:767px){ .pc-only-name{display:none !important;} }`;
+    style.innerHTML = `
+      .mobile-header { display: none; } 
+      @media(max-width:767px){ 
+        .pc-only-name { display: none !important; } 
+        .mobile-header { display: block !important; font-weight: 800; font-size: 15px; color: var(--primary); padding-bottom: 8px; border-bottom: 1px dashed var(--border); margin-bottom: 8px; }
+      }
+    `;
     document.head.appendChild(style);
 
     function toggleSelectAll() {
