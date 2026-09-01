@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>アレスコクライアントポータル</title>
-  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <link rel="icon" href="./logo.png" type="image/png">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -56,34 +56,24 @@
     .client-title { font-size: 16px; font-weight: 700; color: var(--primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: calc(100vw - 80px); }
     .nav-actions { display: flex; gap: 10px; }
     .btn-sm { height: 32px; padding: 0 12px; font-size: 12px; width: auto; }
-
-    /* Nút Menu Hamburger trên Mobile */
     .menu-toggle { display: none; background: none; border: none; font-size: 24px; color: var(--primary); cursor: pointer; padding: 0; line-height: 1; }
-    
-    /* Dropdown Menu Mobile */
     .mobile-menu { display: none; position: absolute; top: 60px; right: 10px; background: var(--surface); border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); border: 1px solid var(--border); z-index: 100; flex-direction: column; overflow: hidden;}
     .mobile-menu.show { display: flex; }
     .mobile-menu button { background: none; border: none; padding: 12px 20px; font-size: 14px; font-weight: bold; color: var(--text); text-align: left; cursor: pointer; border-bottom: 1px solid var(--border);}
     .mobile-menu button:last-child { border-bottom: none; color: var(--danger); }
-    .mobile-menu button:hover { background: #F8FAFC; }
 
     /* --- DASHBOARD LAYOUT --- */
     .dashboard-container { display: flex; flex: 1; overflow: hidden; padding: 15px; gap: 15px; flex-direction: column; }
     @media (min-width: 768px) { .dashboard-container { flex-direction: row; } }
-    
     .sidebar { background: var(--surface); border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.03); padding: 20px; display: flex; flex-direction: column; gap: 20px; overflow-y: auto; border: 1px solid var(--border);}
     @media (min-width: 768px) { .sidebar { width: 300px; flex-shrink: 0; } }
-
     .main-area { background: transparent; flex: 1; display: flex; flex-direction: column; overflow: hidden; position: relative; }
 
-    /* --- MOBILE DRAWER (BỘ LỌC THU GỌN TRÊN MOBILE) --- */
+    /* --- SIDEBAR CONTROLS --- */
     .filter-drawer-btn { display: none; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 12px 15px; font-size: 14px; font-weight: bold; color: var(--primary); cursor: pointer; justify-content: space-between; align-items: center; margin-bottom: 10px;}
     .filter-drawer-btn::after { content: '▼'; font-size: 12px; transition: 0.3s; }
     .filter-drawer-btn.open::after { transform: rotate(180deg); }
-    
     .sidebar-content { display: flex; flex-direction: column; gap: 20px; }
-
-    /* --- SIDEBAR CONTROLS --- */
     .control-box { border-bottom: 1px solid var(--border); padding-bottom: 20px; }
     .control-box:last-child { border-bottom: none; padding-bottom: 0; }
     .control-box h3 { font-size: 13px; color: #718096; margin: 0 0 12px 0; font-weight: bold;}
@@ -105,31 +95,28 @@
     th { position: sticky; top: 0; background: var(--primary); color: white; padding: 15px 12px; font-size: 13px; z-index: 2; white-space: nowrap;}
     td { padding: 15px 12px; border-bottom: 1px solid var(--border); font-size: 14px; vertical-align: middle; }
     tr:hover { background: #F7FAFC; }
-    
     .td-check { width: 50px; text-align: center; }
     .td-check input { width: 18px; height: 18px; cursor: pointer; }
-    
     .status-ok { color: var(--success); font-weight: 700; font-size: 12px; display: inline-flex; align-items: center; justify-content: center; gap: 4px; background: var(--success-bg); padding: 4px 10px; border-radius: 20px;}
     .badge-time { background: #EDF2F7; padding: 4px 8px; border-radius: 6px; font-family: monospace; font-size: 14px; font-weight: bold; color: #4A5568;}
-    
     .feedback-icon { font-size: 20px; cursor: pointer; filter: grayscale(1); transition: 0.2s; opacity: 0.5;}
     .feedback-icon.has-note { filter: grayscale(0); transform: scale(1.1); opacity: 1;}
     .feedback-icon:hover { transform: scale(1.2); opacity: 1;}
 
-    /* --- MOBILE RESPONSIVE TỐI ƯU --- */
+    /* --- TUYỆT CHIÊU GIẤU TÊN NHÂN VIÊN --- */
+    /* Mặc định trên PC: Ẩn cục tên mobile */
+    .mobile-header { display: none; }
+    .pc-only { display: inline-block; }
+
     @media (max-width: 767px) {
       .top-nav { padding: 0 15px; }
-      .nav-actions { display: none; } /* Giấu nút PC đi */
-      .menu-toggle { display: block; } /* Hiện nút Hamburger lên */
-
+      .nav-actions { display: none; } 
+      .menu-toggle { display: block; } 
       .dashboard-container { padding: 10px; gap: 0; }
       .sidebar { background: transparent; border: none; box-shadow: none; padding: 0; overflow: visible; display: block;}
-      
-      /* Biến Sidebar thành Ngăn kéo thu gọn */
       .filter-drawer-btn { display: flex; }
       .sidebar-content { display: none; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 15px; margin-bottom: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
       .sidebar-content.show { display: flex; }
-
       .main-area { background: transparent; border: none; box-shadow: none; }
       .data-scroll { padding-bottom: 30px; }
 
@@ -146,9 +133,10 @@
       .td-check { width: 100%; border-bottom: 1px solid var(--border); padding-bottom: 12px; margin-bottom: 5px; display: flex; justify-content: space-between; align-items: center; }
       .td-check::before { display: none; }
       
-      .mobile-header { font-weight: 800; font-size: 16px; color: var(--primary); }
-
-      .pc-only { display: none; }
+      /* TRÊN MOBILE: Ẩn cột tên PC, Mở cục tên Mobile */
+      .pc-only-name { display: none !important; }
+      .mobile-header { display: block; font-weight: 800; font-size: 16px; color: var(--primary); }
+      .pc-only { display: none !important; }
     }
 
     /* --- MODALS --- */
@@ -157,7 +145,6 @@
     .modal h3 { margin: 0 0 15px 0; color: var(--primary); font-size: 20px; font-weight: bold;}
     textarea { width: 100%; padding: 15px; border: 1px solid var(--border); border-radius: 8px; resize: vertical; min-height: 100px; font-family: inherit; font-size: 14px; outline: none;}
     textarea:focus { border-color: var(--primary-light); }
-    
     #loading { flex-direction: column; color: white; font-weight: bold; z-index: 10000; }
     .spinner { border: 4px solid rgba(255,255,255,0.3); border-top: 4px solid white; border-radius: 50%; width: 48px; height: 48px; animation: spin 1s linear infinite; margin-bottom: 15px; }
     @keyframes spin { 100% { transform: rotate(360deg); } }
@@ -165,54 +152,31 @@
 </head>
 <body>
 
-  <!-- LOADING -->
-  <div id="loading" class="overlay">
-    <div class="spinner"></div>
-    <div id="loadingText" style="font-size: 15px; letter-spacing: 1px;">読み込み中...</div>
-  </div>
+  <div id="loading" class="overlay"><div class="spinner"></div><div id="loadingText" style="font-size: 15px;">読み込み中...</div></div>
 
-  <!-- VIEW: LOGIN -->
   <div id="viewLogin" class="view active">
     <div class="login-box">
       <img src="logo.png" alt="ALESCO" class="login-logo" onerror="this.src='https://alesco-v.co.jp/wp/wp-content/uploads/ALESCO-LOGO.png'">
       <p>クライアント ポータル</p>
-      
       <div id="loginError" style="color:var(--danger); font-size:13px; font-weight:bold; margin-bottom:15px; display:none; padding:10px; background:#FFF5F5; border-radius:6px;"></div>
-      
-      <div class="input-group">
-        <label>ログインID</label>
-        <input type="text" id="inpLoginId" placeholder="IDを入力">
-      </div>
-      <div class="input-group">
-        <label>パスワード</label>
-        <input type="password" id="inpLoginPass" placeholder="パスワードを入力">
-      </div>
+      <div class="input-group"><label>ログインID</label><input type="text" id="inpLoginId" placeholder="IDを入力"></div>
+      <div class="input-group"><label>パスワード</label><input type="password" id="inpLoginPass" placeholder="パスワードを入力"></div>
       <button class="btn btn-primary" style="margin-top:10px;" onclick="doLogin()">ログイン</button>
-
-      <!-- FOOTER ĐÃ CHUI VÀO TRONG HỘP TRẮNG -->
       <div class="site-footer">
           <p><a href="https://alesco-v.co.jp/" target="_blank" rel="noopener noreferrer"><strong>株式会社アレスコ</strong></a></p>
           <p>システムに関するお問い合わせ (9:00 - 18:00)<br><a href="tel:07031316968">📞 070-3131-6968</a></p>
       </div>
-      
     </div>
   </div>
 
-  <!-- VIEW: DASHBOARD -->
   <div id="viewDashboard" class="view">
-    
-    <!-- HEADER -->
     <div class="top-nav">
       <div class="client-title"><span id="txtClientName">---</span> 様</div>
-      <!-- Nút cho PC -->
       <div class="nav-actions">
         <button class="btn btn-outline btn-sm" onclick="showModal('modalPass')">パスワード変更</button>
         <button class="btn btn-outline btn-sm" onclick="doLogout()">ログアウト</button>
       </div>
-      <!-- Nút Hamburger cho Mobile -->
       <button class="menu-toggle" onclick="toggleMobileMenu()">☰</button>
-      
-      <!-- Menu thả xuống Mobile -->
       <div id="mobileMenu" class="mobile-menu">
         <button onclick="toggleMobileMenu(); showModal('modalPass');">🔐 パスワード変更</button>
         <button onclick="toggleMobileMenu(); doLogout();">🚪 ログアウト</button>
@@ -220,11 +184,7 @@
     </div>
 
     <div class="dashboard-container">
-      
-      <!-- BỘ LỌC (SẼ BIẾN THÀNH NGĂN KÉO TRÊN MOBILE) -->
       <div class="sidebar">
-        
-        <!-- BỘ CHỌN THÁNG LÔI RA NGOÀI (Luôn hiển thị) -->
         <div class="control-box" style="padding-bottom: 15px; border-bottom: none;">
           <h3 class="pc-only">対象月</h3>
           <div class="month-picker">
@@ -233,48 +193,33 @@
             <button class="month-btn" onclick="changeMonth(1)">▶</button>
           </div>
         </div>
-
-        <!-- Nút gập mở chỉ hiện trên Mobile -->
         <div class="filter-drawer-btn" id="btnToggleSidebar" onclick="toggleSidebar()">
           <span>🔍 絞り込みと一括承認</span>
         </div>
-
-        <!-- Khối chứa bộ lọc (Bị giấu trên Mobile) -->
         <div class="sidebar-content" id="sidebarContent">
-          
           <div class="control-box">
             <h3>勤務地絞り込み</h3>
             <select id="selLocation" class="filter-sel" onchange="renderTable()"></select>
           </div>
-
-          <!-- MỚI: LỌC THEO TÊN NHÂN VIÊN -->
           <div class="control-box">
             <h3>スタッフ名絞り込み</h3>
             <select id="selEmployee" class="filter-sel" onchange="renderTable()">
               <option value="ALL">すべてのスタッフ</option>
             </select>
           </div>
-
           <div class="control-box approve-panel">
             <h3 style="color:var(--primary-light);">一括承認</h3>
-            <label class="checkbox-master">
-              <input type="checkbox" id="chkSelectAll" onchange="toggleSelectAll()">
-              <span>表示中の未承認をすべて選択</span>
-            </label>
+            <label class="checkbox-master"><input type="checkbox" id="chkSelectAll" onchange="toggleSelectAll()"><span>表示中の未承認をすべて選択</span></label>
             <div style="font-size:12px; margin-bottom:8px; font-weight:bold; color:#4A5568;">承認者名を入力：</div>
             <input type="text" id="inpApprover" placeholder="例: 山田 太郎" oninput="checkApproveReady()">
-            <button id="btnApprove" class="btn btn-accent" disabled onclick="doApprove()">
-              選択項目を承認 (<span id="lblApproveCount">0</span>)
-            </button>
+            <button id="btnApprove" class="btn btn-accent" disabled onclick="doApprove()">選択項目を承認 (<span id="lblApproveCount">0</span>)</button>
           </div>
-
           <div class="control-box">
             <button class="btn btn-outline" onclick="exportCSV()">📥 CSVダウンロード</button>
           </div>
         </div>
       </div>
 
-      <!-- BẢNG DỮ LIỆU BÊN PHẢI -->
       <div class="main-area">
         <div class="data-scroll">
           <table id="dataTable">
@@ -283,27 +228,21 @@
                 <th class="td-check">選択</th>
                 <th>日付</th>
                 <th>勤務地</th>
-                <th>スタッフ名</th>
+                <th class="pc-only-name">スタッフ名</th>
                 <th>出退勤</th>
                 <th>実働</th>
                 <th>交通費</th>
                 <th style="text-align:center;">連絡</th>
               </tr>
             </thead>
-            <tbody id="tableBody">
-              <!-- Render by JS -->
-            </tbody>
+            <tbody id="tableBody"></tbody>
           </table>
-          <div id="noDataMsg" style="display:none; text-align:center; padding: 60px 20px; color:#A0AEC0; font-weight:bold; font-size:15px;">
-            該当するデータがありません。
-          </div>
+          <div id="noDataMsg" style="display:none; text-align:center; padding: 60px 20px; color:#A0AEC0; font-weight:bold; font-size:15px;">該当するデータがありません。</div>
         </div>
       </div>
-
     </div>
   </div>
 
-  <!-- MODAL: GHI CHÚ -->
   <div id="modalFeedback" class="overlay" onclick="closeModalOutside(event, 'modalFeedback')">
     <div class="modal">
       <h3>連絡事項</h3>
@@ -317,19 +256,12 @@
     </div>
   </div>
 
-  <!-- MODAL: ĐỔI MẬT KHẨU -->
   <div id="modalPass" class="overlay" onclick="closeModalOutside(event, 'modalPass')">
     <div class="modal">
       <h3>パスワード変更</h3>
       <div id="errPass" style="color:var(--danger); font-size:13px; font-weight:bold; margin-bottom:15px; display:none; padding:10px; background:#FFF5F5; border-radius:6px;"></div>
-      <div class="input-group">
-        <label>現在のパスワード</label>
-        <input type="password" id="inpOldPass">
-      </div>
-      <div class="input-group">
-        <label>新しいパスワード</label>
-        <input type="password" id="inpNewPass">
-      </div>
+      <div class="input-group"><label>現在のパスワード</label><input type="password" id="inpOldPass"></div>
+      <div class="input-group"><label>新しいパスワード</label><input type="password" id="inpNewPass"></div>
       <div style="display:flex; gap:12px; margin-top:25px;">
         <button class="btn btn-outline" onclick="closeModal('modalPass')">キャンセル</button>
         <button class="btn btn-primary" onclick="doChangePass()">変更する</button>
@@ -338,10 +270,7 @@
   </div>
 
   <script>
-    // =========================================
-    // THIẾT LẬP KẾT NỐI API
-    // =========================================
-    // 👉 ĐIỀN LINK WEB APP CỦA ÔNG VÀO ĐÂY:
+    // 👉 NHỚ DÁN LẠI CÁI LINK API VÀO ĐÂY NHÉ!
     const GAS_API_URL = "https://script.google.com/macros/s/AKfycbwEy1ArOJjCE4joiEErl33EjMgH_4tcQc-5BYD8DVzvyBnDZSiqwIu2e0HbcS2FGPlB/exec"; 
 
     let clientToken = sessionStorage.getItem('alescoClientToken');
@@ -361,27 +290,18 @@
       }
     });
 
-    // --- MOBILE UI FUNCTIONS ---
-    function toggleMobileMenu() {
-      document.getElementById('mobileMenu').classList.toggle('show');
-    }
-
+    function toggleMobileMenu() { document.getElementById('mobileMenu').classList.toggle('show'); }
     function toggleSidebar() {
       const content = document.getElementById('sidebarContent');
       const btn = document.getElementById('btnToggleSidebar');
-      content.classList.toggle('show');
-      btn.classList.toggle('open');
+      content.classList.toggle('show'); btn.classList.toggle('open');
     }
-
     document.addEventListener('click', function(e) {
       const menu = document.getElementById('mobileMenu');
       const toggleBtn = document.querySelector('.menu-toggle');
-      if (menu.classList.contains('show') && !menu.contains(e.target) && e.target !== toggleBtn) {
-        menu.classList.remove('show');
-      }
+      if (menu.classList.contains('show') && !menu.contains(e.target) && e.target !== toggleBtn) menu.classList.remove('show');
     });
 
-    // --- API CALLERS ---
     function callAPI(action, params = [], loadingMsg = "処理中...") {
       return new Promise((resolve, reject) => {
         showLoading(true, loadingMsg);
@@ -390,22 +310,11 @@
           headers: { 'Content-Type': 'text/plain;charset=utf-8' },
           body: JSON.stringify({ action: action, token: clientToken, params: params }),
           redirect: 'follow'
-        })
-        .then(r => r.json())
-        .then(res => {
+        }).then(r => r.json()).then(res => {
           showLoading(false);
-          if (res.error === "AUTH_FAILED") {
-            doLogout(true);
-            reject(new Error("セッション切れ"));
-          } else {
-            resolve(res);
-          }
-        })
-        .catch(err => {
-          showLoading(false);
-          alert("通信エラーが発生しました。");
-          reject(err);
-        });
+          if (res.error === "AUTH_FAILED") { doLogout(true); reject(new Error("セッション切れ")); } 
+          else { resolve(res); }
+        }).catch(err => { showLoading(false); alert("通信エラーが発生しました。"); reject(err); });
       });
     }
 
@@ -419,75 +328,53 @@
       document.getElementById(id).classList.add('active');
     }
 
-    // --- LOGIN / LOGOUT ---
     async function doLogin() {
       const id = document.getElementById('inpLoginId').value.trim();
       const pass = document.getElementById('inpLoginPass').value.trim();
       const err = document.getElementById('loginError');
       if (!id || !pass) { err.innerText = "入力してください。"; err.style.display = "block"; return; }
       err.style.display = "none";
-
       const res = await callAPI("clientLogin", [id, pass], "ログイン中...");
       if (res.result && res.result.success) {
-        clientToken = res.result.token;
-        clientName = res.result.clientData.name;
-        sessionStorage.setItem('alescoClientToken', clientToken);
-        sessionStorage.setItem('alescoClientName', clientName);
+        clientToken = res.result.token; clientName = res.result.clientData.name;
+        sessionStorage.setItem('alescoClientToken', clientToken); sessionStorage.setItem('alescoClientName', clientName);
         document.getElementById('txtClientName').innerText = clientName;
-        showView('viewDashboard');
-        updateMonthLabel();
-        fetchData();
+        showView('viewDashboard'); updateMonthLabel(); fetchData();
       } else {
-        err.innerText = res.result ? res.result.message : res.error;
-        err.style.display = "block";
+        err.innerText = res.result ? res.result.message : res.error; err.style.display = "block";
       }
     }
 
     function doLogout(isAuto = false) {
-      sessionStorage.clear();
-      clientToken = null; clientName = null;
+      sessionStorage.clear(); clientToken = null; clientName = null;
       document.getElementById('inpLoginPass').value = '';
       showView('viewLogin');
       if (isAuto) alert("セキュリティのため自動ログアウトしました。再度ログインしてください。");
     }
 
-    // --- DASHBOARD LOGIC ---
     function changeMonth(dir) {
       currentMonth += dir;
       if (currentMonth > 12) { currentMonth = 1; currentYear++; }
       if (currentMonth < 1) { currentMonth = 12; currentYear--; }
-      updateMonthLabel();
-      fetchData();
+      updateMonthLabel(); fetchData();
     }
 
-    function updateMonthLabel() {
-      document.getElementById('lblMonth').innerText = `${currentYear}年 ${String(currentMonth).padStart(2,'0')}月`;
-    }
+    function updateMonthLabel() { document.getElementById('lblMonth').innerText = `${currentYear}年 ${String(currentMonth).padStart(2,'0')}月`; }
 
     async function fetchData() {
       const monthStr = `${currentYear}-${String(currentMonth).padStart(2,'0')}`;
       const res = await callAPI("getClientData", [monthStr], "データ取得中...");
-      
       if (res.result && res.result.success) {
         currentData = res.result.data;
-        
-        // 1. Cập nhật Dropdown Cửa hàng
-        const selLoc = document.getElementById('selLocation');
-        const oldLoc = selLoc.value;
+        const selLoc = document.getElementById('selLocation'); const oldLoc = selLoc.value;
         selLoc.innerHTML = '<option value="ALL">すべて表示</option>';
-        res.result.locations.sort().forEach(loc => {
-          selLoc.innerHTML += `<option value="${loc}">${loc}</option>`;
-        });
+        res.result.locations.sort().forEach(loc => { selLoc.innerHTML += `<option value="${loc}">${loc}</option>`; });
         if (res.result.locations.includes(oldLoc)) selLoc.value = oldLoc;
 
-        // 2. Cập nhật Dropdown Nhân viên (Lấy danh sách duy nhất)
-        const selEmp = document.getElementById('selEmployee');
-        const oldEmp = selEmp.value;
+        const selEmp = document.getElementById('selEmployee'); const oldEmp = selEmp.value;
         selEmp.innerHTML = '<option value="ALL">すべてのスタッフ</option>';
         const uniqueEmps = [...new Set(currentData.map(item => item.empName))].sort();
-        uniqueEmps.forEach(emp => {
-          selEmp.innerHTML += `<option value="${emp}">${emp}</option>`;
-        });
+        uniqueEmps.forEach(emp => { selEmp.innerHTML += `<option value="${emp}">${emp}</option>`; });
         if (uniqueEmps.includes(oldEmp)) selEmp.value = oldEmp;
 
         renderTable();
@@ -497,13 +384,11 @@
     function renderTable() {
       const tbody = document.getElementById('tableBody');
       const locFilter = document.getElementById('selLocation').value;
-      const empFilter = document.getElementById('selEmployee').value; // Lấy giá trị lọc tên
+      const empFilter = document.getElementById('selEmployee').value;
       tbody.innerHTML = '';
       
-      // Lọc theo 2 điều kiện: Cửa hàng VÀ Tên nhân viên
       const filtered = currentData.filter(r => 
-        (locFilter === 'ALL' || r.locationName === locFilter) &&
-        (empFilter === 'ALL' || r.empName === empFilter)
+        (locFilter === 'ALL' || r.locationName === locFilter) && (empFilter === 'ALL' || r.empName === empFilter)
       );
       
       document.getElementById('noDataMsg').style.display = filtered.length === 0 ? 'block' : 'none';
@@ -514,16 +399,10 @@
       filtered.forEach(r => {
         let isAppr = r.isApproved;
         let trClass = isAppr ? 'style="background:#F7FAFC; color:#A0AEC0;"' : '';
-        
-        let fbIcon = r.feedbackMessage ? '📝' : '💬';
-        let fbClass = r.feedbackMessage ? 'has-note' : '';
+        let fbIcon = r.feedbackMessage ? '📝' : '💬'; let fbClass = r.feedbackMessage ? 'has-note' : '';
         let safeMsg = r.feedbackMessage ? r.feedbackMessage.replace(/"/g, '&quot;') : '';
-
         let hoursStr = (typeof r.workHours === 'number') ? r.workHours.toFixed(2) : "0.00";
-
-        let chkHtml = isAppr 
-          ? `<div class="status-ok" title="${r.approverName} - ${r.approvalTimestamp}">✓ 承認済</div>`
-          : `<input type="checkbox" class="chk-row" data-id="${r.recordId}" onchange="checkApproveReady()">`;
+        let chkHtml = isAppr ? `<div class="status-ok" title="${r.approverName} - ${r.approvalTimestamp}">✓ 承認済</div>` : `<input type="checkbox" class="chk-row" data-id="${r.recordId}" onchange="checkApproveReady()">`;
 
         html += `
           <tr ${trClass}>
@@ -543,32 +422,18 @@
           </tr>
         `;
       });
-      tbody.innerHTML = html;
-      checkApproveReady();
+      tbody.innerHTML = html; checkApproveReady();
     }
-
-    // CSS nội tuyến vá lỗi hiển thị tên nhân viên (Giấu Header Mobile trên PC, và Giấu Cột Tên PC trên Mobile)
-    const style = document.createElement('style');
-    style.innerHTML = `
-      .mobile-header { display: none; } 
-      @media(max-width:767px){ 
-        .pc-only-name { display: none !important; } 
-        .mobile-header { display: block !important; font-weight: 800; font-size: 15px; color: var(--primary); padding-bottom: 8px; border-bottom: 1px dashed var(--border); margin-bottom: 8px; }
-      }
-    `;
-    document.head.appendChild(style);
 
     function toggleSelectAll() {
       const isChecked = document.getElementById('chkSelectAll').checked;
-      document.querySelectorAll('.chk-row').forEach(cb => cb.checked = isChecked);
-      checkApproveReady();
+      document.querySelectorAll('.chk-row').forEach(cb => cb.checked = isChecked); checkApproveReady();
     }
 
     function checkApproveReady() {
       const checkedCount = document.querySelectorAll('.chk-row:checked').length;
       const approverName = document.getElementById('inpApprover').value.trim();
       const btn = document.getElementById('btnApprove');
-      
       document.getElementById('lblApproveCount').innerText = checkedCount;
       btn.disabled = !(checkedCount > 0 && approverName !== "");
     }
@@ -577,97 +442,49 @@
       const cbs = document.querySelectorAll('.chk-row:checked');
       const name = document.getElementById('inpApprover').value.trim();
       const ids = Array.from(cbs).map(cb => cb.getAttribute('data-id'));
-
       if (!confirm(`${ids.length} 件を「${name}」様のお名前で承認します。よろしいですか？`)) return;
-
       const res = await callAPI("saveClientApproval", [ids, name], "承認処理中...");
-      if (res.result && res.result.success) {
-        alert("承認が完了しました。");
-        document.getElementById('chkSelectAll').checked = false;
-        fetchData(); 
-      } else {
-        alert("エラー: " + (res.result ? res.result.message : "不明なエラー"));
-      }
+      if (res.result && res.result.success) { alert("承認が完了しました。"); document.getElementById('chkSelectAll').checked = false; fetchData(); } 
+      else { alert("エラー: " + (res.result ? res.result.message : "不明なエラー")); }
     }
 
-    // --- FEEDBACK ---
     function openFeedback(id, msg, isApproved) {
-      document.getElementById('hdnRecordId').value = id;
-      document.getElementById('inpFeedback').value = msg;
-      document.getElementById('inpFeedback').disabled = isApproved;
-      
-      const btn = document.getElementById('btnSaveFeedback');
-      btn.style.display = isApproved ? 'none' : 'block';
-      showModal('modalFeedback');
+      document.getElementById('hdnRecordId').value = id; document.getElementById('inpFeedback').value = msg; document.getElementById('inpFeedback').disabled = isApproved;
+      document.getElementById('btnSaveFeedback').style.display = isApproved ? 'none' : 'block'; showModal('modalFeedback');
     }
 
     async function saveFeedback() {
-      const id = document.getElementById('hdnRecordId').value;
-      const msg = document.getElementById('inpFeedback').value.trim();
-      
+      const id = document.getElementById('hdnRecordId').value; const msg = document.getElementById('inpFeedback').value.trim();
       const res = await callAPI("saveClientFeedback", [id, msg], "保存中...");
-      if (res.result && res.result.success) {
-        closeModal('modalFeedback');
-        fetchData();
-      } else {
-        alert("エラーが発生しました。");
-      }
+      if (res.result && res.result.success) { closeModal('modalFeedback'); fetchData(); } else { alert("エラーが発生しました。"); }
     }
 
-    // --- CHANGE PASSWORD ---
     async function doChangePass() {
-      const oldP = document.getElementById('inpOldPass').value.trim();
-      const newP = document.getElementById('inpNewPass').value.trim();
-      const err = document.getElementById('errPass');
-      
+      const oldP = document.getElementById('inpOldPass').value.trim(); const newP = document.getElementById('inpNewPass').value.trim(); const err = document.getElementById('errPass');
       if (!oldP || !newP) { err.innerText = "パスワードを入力してください。"; err.style.display="block"; return; }
       if (newP.length < 4) { err.innerText = "新しいパスワードは4文字以上で設定してください。"; err.style.display="block"; return; }
       err.style.display="none";
-
       const res = await callAPI("changeClientPassword", [oldP, newP], "変更中...");
-      if (res.result && res.result.success) {
-        alert("パスワードを変更しました。再度ログインしてください。");
-        closeModal('modalPass');
-        doLogout();
-      } else {
-        err.innerText = res.result ? res.result.message : "エラーが発生しました。";
-        err.style.display="block";
-      }
+      if (res.result && res.result.success) { alert("パスワードを変更しました。再度ログインしてください。"); closeModal('modalPass'); doLogout(); } 
+      else { err.innerText = res.result ? res.result.message : "エラーが発生しました。"; err.style.display="block"; }
     }
 
-    // --- EXPORT CSV ---
     function exportCSV() {
       const locFilter = document.getElementById('selLocation').value;
       const filtered = currentData.filter(r => locFilter === 'ALL' || r.locationName === locFilter);
       if (filtered.length === 0) return alert('エクスポートするデータがありません。');
-
       let csv = "\uFEFF名前,日付,勤務地,出勤,退勤,実働(h),交通費(円),連絡事項\n";
       filtered.forEach(r => {
-        let name = `"${r.empName.replace(/"/g, '""')}"`;
-        let loc = `"${r.locationName.replace(/"/g, '""')}"`;
-        let fb = `"${r.feedbackMessage.replace(/"/g, '""')}"`;
+        let name = `"${r.empName.replace(/"/g, '""')}"`; let loc = `"${r.locationName.replace(/"/g, '""')}"`; let fb = `"${r.feedbackMessage.replace(/"/g, '""')}"`;
         let hoursStr = (typeof r.workHours === 'number') ? r.workHours.toFixed(2) : "0.00";
         csv += `${name},${r.date},${loc},${r.checkIn},${r.checkOut},${hoursStr},${r.transportCost},${fb}\n`;
       });
-
-      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `timesheet_${currentYear}_${String(currentMonth).padStart(2,'0')}.csv`;
-      a.click();
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' }); const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href = url; a.download = `timesheet_${currentYear}_${String(currentMonth).padStart(2,'0')}.csv`; a.click();
     }
 
-    // --- UTILS ---
     function showModal(id) { document.getElementById(id).style.display = 'flex'; }
-    function closeModal(id) {
-      document.getElementById(id).style.display = 'none';
-      if (id === 'modalPass') {
-        document.getElementById('inpOldPass').value = '';
-        document.getElementById('inpNewPass').value = '';
-        document.getElementById('errPass').style.display = 'none';
-      }
-    }
+    function closeModal(id) { document.getElementById(id).style.display = 'none'; if (id === 'modalPass') { document.getElementById('inpOldPass').value = ''; document.getElementById('inpNewPass').value = ''; document.getElementById('errPass').style.display = 'none'; } }
     function closeModalOutside(e, id) { if (e.target.id === id) closeModal(id); }
   </script>
 </body>
