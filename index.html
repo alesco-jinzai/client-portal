@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>アレスコクライアントポータル</title>
-  <link rel="icon" href="./logo.png" type="image/png">
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -209,7 +209,7 @@
           </div>
           <div class="control-box approve-panel">
             <h3 style="color:var(--primary-light);">一括承認</h3>
-            <label class="checkbox-master"><input type="checkbox" id="chkSelectAll" onchange="toggleSelectAll()"><span>表示中の未承認をすべて選択</span></label>
+            <label class="checkbox-master"><input type="checkbox" id="chkSelectAll" onchange="toggleSelectAll()"><span>未承認をすべて選択</span></label>
             <div style="font-size:12px; margin-bottom:8px; font-weight:bold; color:#4A5568;">承認者名を入力：</div>
             <input type="text" id="inpApprover" placeholder="例: 山田 太郎" oninput="checkApproveReady()">
             <button id="btnApprove" class="btn btn-accent" disabled onclick="doApprove()">選択項目を承認 (<span id="lblApproveCount">0</span>)</button>
@@ -280,6 +280,7 @@
     let currentMonth = new Date().getMonth() + 1;
 
     document.addEventListener("DOMContentLoaded", () => {
+      // Logic kiểm tra Token cũ
       if (clientToken) {
         showView('viewDashboard');
         document.getElementById('txtClientName').innerText = clientName;
@@ -288,6 +289,27 @@
       } else {
         showView('viewLogin');
       }
+
+      // 👇 THÊM ĐOẠN NÀY ĐỂ BẮT SỰ KIỆN PHÍM ENTER 👇
+      const idInput = document.getElementById('inpLoginId');
+      const passInput = document.getElementById('inpLoginPass');
+
+      // Nếu đang đứng ở ô ID mà bấm Enter thì tự động nhảy sang ô Pass
+      idInput.addEventListener("keyup", function(event) {
+        if (event.key === "Enter") {
+          event.preventDefault();
+          passInput.focus();
+        }
+      });
+
+      // Nếu đang đứng ở ô Pass mà bấm Enter thì tự động bấm nút Login
+      passInput.addEventListener("keyup", function(event) {
+        if (event.key === "Enter") {
+          event.preventDefault();
+          doLogin(); // Gọi thẳng hàm đăng nhập
+        }
+      });
+      // 👆 KẾT THÚC ĐOẠN THÊM VÀO 👆
     });
 
     function toggleMobileMenu() { document.getElementById('mobileMenu').classList.toggle('show'); }
