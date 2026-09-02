@@ -421,10 +421,27 @@
       filtered.forEach(r => {
         let isAppr = r.isApproved;
         let trClass = isAppr ? 'style="background:#F7FAFC; color:#A0AEC0;"' : '';
-        let fbIcon = r.feedbackMessage ? '📝' : '💬'; let fbClass = r.feedbackMessage ? 'has-note' : '';
+        
+        let fbIcon = r.feedbackMessage ? '📝' : '💬';
+        let fbClass = r.feedbackMessage ? 'has-note' : '';
         let safeMsg = r.feedbackMessage ? r.feedbackMessage.replace(/"/g, '&quot;') : '';
-        let hoursStr = (typeof r.workHours === 'number') ? r.workHours.toFixed(2) : "0.00";
-        let chkHtml = isAppr ? `<div class="status-ok" title="${r.approverName} - ${r.approvalTimestamp}">✓</div>` : `<input type="checkbox" class="chk-row" data-id="${r.recordId}" onchange="checkApproveReady()">`;
+
+        // ĐỔI FORMAT GIỜ: Từ 8.50 thành 08:30
+        let hoursStr = "00:00";
+        if (typeof r.workHours === 'number' && r.workHours > 0) {
+            let h = Math.floor(r.workHours);
+            let m = Math.round((r.workHours - h) * 60);
+            hoursStr = String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');
+        }
+
+        // ĐỔI HIỂN THỊ DUYỆT: Hiện thẳng TÊN NGƯỜI DUYỆT thay vì chữ "承認済"
+        let chkHtml = "";
+        if (isAppr) {
+            let approverShort = r.approverName.length > 6 ? r.approverName.substring(0, 5) + '...' : r.approverName;
+            chkHtml = `<div class="status-ok" title="承認日時: ${r.approvalTimestamp}">✓ ${approverShort}</div>`;
+        } else {
+            chkHtml = `<input type="checkbox" class="chk-row" data-id="${r.recordId}" onchange="checkApproveReady()">`;
+        }
 
         html += `
           <tr ${trClass}>
@@ -436,7 +453,7 @@
             <td data-label="勤務地">${r.locationName}</td>
             <td data-label="スタッフ名" class="pc-only-name"><strong>${r.empName}</strong></td>
             <td data-label="出退勤"><span class="badge-time">${r.checkIn}</span> ~ <span class="badge-time">${r.checkOut}</span></td>
-            <td data-label="実働"><strong>${hoursStr} h</strong></td>
+            <td data-label="実働"><strong>${hoursStr}</strong></td>
             <td data-label="交通費">¥${r.transportCost.toLocaleString()}</td>
             <td data-label="連絡" style="text-align:center;">
                <span class="feedback-icon ${fbClass}" onclick="openFeedback('${r.recordId}', '${safeMsg}', ${isAppr})" title="連絡事項">${fbIcon}</span>
@@ -495,14 +512,33 @@
       const locFilter = document.getElementById('selLocation').value;
       const filtered = currentData.filter(r => locFilter === 'ALL' || r.locationName === locFilter);
       if (filtered.length === 0) return alert('エクスポートするデータがありません。');
-      let csv = "\uFEFF名前,日付,勤務地,出勤,退勤,実働(h),交通費(円),連絡事項\n";
+
+      // Thêm cột 承認者名 vào Header CSV
+      let csv = "\uFEFF名前,日付,勤務地,出勤,退勤,実働,交通費(円),連絡事項,承認者\n";
+      
       filtered.forEach(r => {
-        let name = `"${r.empName.replace(/"/g, '""')}"`; let loc = `"${r.locationName.replace(/"/g, '""')}"`; let fb = `"${r.feedbackMessage.replace(/"/g, '""')}"`;
-        let hoursStr = (typeof r.workHours === 'number') ? r.workHours.toFixed(2) : "0.00";
-        csv += `${name},${r.date},${loc},${r.checkIn},${r.checkOut},${hoursStr},${r.transportCost},${fb}\n`;
+        let name = `"${r.empName.replace(/"/g, '""')}"`;
+        let loc = `"${r.locationName.replace(/"/g, '""')}"`;
+        let fb = `"${r.feedbackMessage.replace(/"/g, '""')}"`;
+        let appr = r.isApproved ? `"${r.approverName.replace(/"/g, '""')}"` : "";
+
+        // Chuyển đổi workHours thành HH:mm cho file CSV
+        let hoursStr = "00:00";
+        if (typeof r.workHours === 'number' && r.workHours > 0) {
+            let h = Math.floor(r.workHours);
+            let m = Math.round((r.workHours - h) * 60);
+            hoursStr = String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');
+        }
+
+        csv += `${name},${r.date},${loc},${r.checkIn},${r.checkOut},${hoursStr},${r.transportCost},${fb},${appr}\n`;
       });
-      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' }); const url = URL.createObjectURL(blob);
-      const a = document.createElement('a'); a.href = url; a.download = `timesheet_${currentYear}_${String(currentMonth).padStart(2,'0')}.csv`; a.click();
+
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `timesheet_${currentYear}_${String(currentMonth).padStart(2,'0')}.csv`;
+      a.click();
     }
 
     function showModal(id) { document.getElementById(id).style.display = 'flex'; }
