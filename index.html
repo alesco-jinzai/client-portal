@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>アレスコクライアントポータル</title>
+  <title>アレスコ勤怠管理</title>
   <link rel="icon" href="favicon.ico" type="image/x-icon">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
@@ -157,7 +157,7 @@
   <div id="viewLogin" class="view active">
     <div class="login-box">
       <img src="logo.png" alt="ALESCO" class="login-logo" onerror="this.src='https://alesco-v.co.jp/wp/wp-content/uploads/ALESCO-LOGO.png'">
-      <p>クライアント ポータル</p>
+      <p>アレスコ 勤怠管理</p>
       <div id="loginError" style="color:var(--danger); font-size:13px; font-weight:bold; margin-bottom:15px; display:none; padding:10px; background:#FFF5F5; border-radius:6px;"></div>
       <div class="input-group"><label>ログインID</label><input type="text" id="inpLoginId" placeholder="IDを入力"></div>
       <div class="input-group"><label>パスワード</label><input type="password" id="inpLoginPass" placeholder="パスワードを入力"></div>
@@ -171,7 +171,7 @@
 
   <div id="viewDashboard" class="view">
     <div class="top-nav">
-      <div class="client-title"><span id="txtClientName">---</span> 様</div>
+      <div class="client-title"><span id="txtClientName">---</span></div>
       <div class="nav-actions">
         <button class="btn btn-outline btn-sm" onclick="showModal('modalPass')">パスワード変更</button>
         <button class="btn btn-outline btn-sm" onclick="doLogout()">ログアウト</button>
