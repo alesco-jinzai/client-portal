@@ -148,14 +148,6 @@
     #loading { flex-direction: column; color: white; font-weight: bold; z-index: 10000; }
     .spinner { border: 4px solid rgba(255,255,255,0.3); border-top: 4px solid white; border-radius: 50%; width: 48px; height: 48px; animation: spin 1s linear infinite; margin-bottom: 15px; }
     @keyframes spin { 100% { transform: rotate(360deg); } }
-
-    /* CSS CHO ICON BÚT CHÌ SỬA GIỜ */
-    .edit-icon { 
-      cursor: pointer; color: var(--primary-light); opacity: 0.6; 
-      transition: 0.2s; display: inline-flex; align-items: center; justify-content: center;
-    }
-    .edit-icon:hover { opacity: 1; transform: scale(1.2); }
-    .edit-icon svg { width: 18px; height: 18px; fill: currentColor; }
     
   </style>
 </head>
@@ -505,20 +497,19 @@
             
             <td data-label="実働"><strong>${hoursStr}</strong></td>
             <td data-label="交通費">¥${r.transportCost.toLocaleString()}</td>
+            <!-- 👇 BÁC CHÈN LẠI CỘT NÀY 👇 -->
             <td data-label="操作" style="text-align:center; min-width: 80px;">
-               <div style="display:flex; justify-content:center; align-items:center; gap:15px;">
+               <div style="display:flex; justify-content:center; align-items:center; gap:12px;">
                  
-                 <!-- ICON BÚT CHÌ (CHỈ HIỆN KHI CHƯA DUYỆT) -->
-                 ${!isAppr ? `
-                 <span class="edit-icon" onclick="openEditTimeModal('${r.recordId}', '${r.checkIn}', '${r.checkOut}', '${r.breakMins}')" title="打刻を修正する">
-                    <svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
-                 </span>` : `<span style="width:18px;"></span>`}
+                 <!-- EMOJI BÚT CHÌ (LUÔN HIỆN, KIỂM TRA DUYỆT Ở JS) -->
+                 <span class="feedback-icon" style="font-size: 18px;" onclick="openEditTimeModal('${r.recordId}', '${r.checkIn}', '${r.checkOut}', '${r.breakMins}', ${isAppr})" title="打刻を修正する">✏️</span>
                  
-                 <!-- NÚT MESSAGE (GIỮ NGUYÊN) -->
+                 <!-- NÚT MESSAGE -->
                  <span class="feedback-icon ${fbClass}" onclick="openFeedback('${r.recordId}', '${safeMsg}', ${isAppr})" title="連絡事項">${fbIcon}</span>
                
                </div>
             </td>
+            <!-- 👆 KẾT THÚC CỘT MỚI 👆 -->
           </tr>
         `;
       });
@@ -549,8 +540,14 @@
     }
 
     function openFeedback(id, msg, isApproved) {
-      document.getElementById('hdnRecordId').value = id; document.getElementById('inpFeedback').value = msg; document.getElementById('inpFeedback').disabled = isApproved;
-      document.getElementById('btnSaveFeedback').style.display = isApproved ? 'none' : 'block'; showModal('modalFeedback');
+      document.getElementById('hdnRecordId').value = id; 
+      document.getElementById('inpFeedback').value = msg; 
+      
+      // 👉 LUÔN CHO PHÉP GÕ VÀ GỬI TIN NHẮN (BẤT KỂ ĐÃ DUYỆT HAY CHƯA)
+      document.getElementById('inpFeedback').disabled = false;
+      document.getElementById('btnSaveFeedback').style.display = 'block'; 
+      
+      showModal('modalFeedback');
     }
 
     async function saveFeedback() {
@@ -614,7 +611,14 @@
     // =====================================
     // LOGIC SỬA GIỜ DÀNH CHO KHÁCH HÀNG
     // =====================================
-    function openEditTimeModal(id, inTime, outTime, breakMins) {
+    function openEditTimeModal(id, inTime, outTime, breakMins, isApproved) {
+      
+      // CHỐT CHẶN: NẾU ĐÃ DUYỆT -> HIỆN THÔNG BÁO VÀ CHẶN LẠI
+      if (isApproved) {
+        alert("既に承認済みの記録です。\n打刻の修正が必要な場合は、アレスコ担当者までご連絡ください。");
+        return; 
+      }
+
       document.getElementById('hdnEditRecordId').value = id; 
       
       // Xử lý cái "---" (Chưa quẹt) thành rỗng để nhét vào ô Time
