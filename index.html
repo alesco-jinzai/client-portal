@@ -149,8 +149,13 @@
     .spinner { border: 4px solid rgba(255,255,255,0.3); border-top: 4px solid white; border-radius: 50%; width: 48px; height: 48px; animation: spin 1s linear infinite; margin-bottom: 15px; }
     @keyframes spin { 100% { transform: rotate(360deg); } }
 
-    .btn-edit-client { background:none; border:1px solid #CBD5E0; border-radius:4px; padding:4px 10px; font-size:11px; font-weight:bold; color:var(--primary-light); cursor:pointer; transition:0.2s;}
-    .btn-edit-client:hover { background:#EBF8FF; border-color:var(--primary-light);}
+    /* CSS CHO ICON BÚT CHÌ SỬA GIỜ */
+    .edit-icon { 
+      cursor: pointer; color: var(--primary-light); opacity: 0.6; 
+      transition: 0.2s; display: inline-flex; align-items: center; justify-content: center;
+    }
+    .edit-icon:hover { opacity: 1; transform: scale(1.2); }
+    .edit-icon svg { width: 18px; height: 18px; fill: currentColor; }
     
   </style>
 </head>
@@ -500,13 +505,18 @@
             
             <td data-label="実働"><strong>${hoursStr}</strong></td>
             <td data-label="交通費">¥${r.transportCost.toLocaleString()}</td>
-            <td data-label="操作" style="text-align:center; min-width: 90px;">
-               <div style="display:flex; justify-content:center; align-items:center; gap:12px;">
-                 <!-- NÚT SỬA (CHỈ HIỆN KHI CHƯA DUYỆT) -->
-                 ${!isAppr ? `<button class="btn-edit-client" onclick="openEditTimeModal('${r.recordId}', '${r.checkIn}', '${r.checkOut}', '${r.breakMins}')">修正</button>` : `<span style="width:46px;"></span>`}
+            <td data-label="操作" style="text-align:center; min-width: 80px;">
+               <div style="display:flex; justify-content:center; align-items:center; gap:15px;">
+                 
+                 <!-- ICON BÚT CHÌ (CHỈ HIỆN KHI CHƯA DUYỆT) -->
+                 ${!isAppr ? `
+                 <span class="edit-icon" onclick="openEditTimeModal('${r.recordId}', '${r.checkIn}', '${r.checkOut}', '${r.breakMins}')" title="打刻を修正する">
+                    <svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+                 </span>` : `<span style="width:18px;"></span>`}
                  
                  <!-- NÚT MESSAGE (GIỮ NGUYÊN) -->
                  <span class="feedback-icon ${fbClass}" onclick="openFeedback('${r.recordId}', '${safeMsg}', ${isAppr})" title="連絡事項">${fbIcon}</span>
+               
                </div>
             </td>
           </tr>
