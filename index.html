@@ -23,6 +23,9 @@
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
     body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; height: 100vh; display: flex; flex-direction: column; overflow: hidden;}
     
+    /* 👉 Đã đồng bộ Font chữ cho toàn bộ ô nhập liệu */
+    input, select, textarea, button { font-family: inherit; }
+
     .view { display: none; flex: 1; flex-direction: column; overflow: hidden; }
     .view.active { display: flex; animation: fadeIn 0.3s ease; }
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
@@ -95,15 +98,18 @@
     th { position: sticky; top: 0; background: var(--primary); color: white; padding: 15px 12px; font-size: 13px; z-index: 2; white-space: nowrap;}
     td { padding: 15px 12px; border-bottom: 1px solid var(--border); font-size: 14px; vertical-align: middle; }
     tr:hover { background: #F7FAFC; }
-    .td-check { width: 90px; text-align: center; }}
+    .td-check { width: 90px; text-align: center; } /* 👉 Đã fix lỗi dư dấu ngoặc ở đây */
     .td-check input { width: 18px; height: 18px; cursor: pointer; }
     .status-ok { color: var(--success); font-weight: 700; font-size: 12px; display: block; background: var(--success-bg); padding: 6px 4px; border-radius: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
     .feedback-icon { font-size: 18px; cursor: pointer; transition: 0.2s; opacity: 0.6; display: inline-flex; align-items: center; justify-content: center;}
     .feedback-icon.has-note { transform: scale(1.1); opacity: 1;}
     .feedback-icon:hover { transform: scale(1.2); opacity: 1;}
 
-    /* --- TUYỆT CHIÊU GIẤU TÊN NHÂN VIÊN --- */
-    /* Mặc định trên PC: Ẩn cục tên mobile */
+    /* 👉 Mặc định PC: Ẩn thanh nổi ở đáy, Hiện Sidebar duyệt ca */
+    #floatingApproveBar { display: none !important; }
+    .sidebar-approve-panel { display: block; }
+
+    /* --- MOBILE RESPONSIVE --- */
     .mobile-header { display: none; }
     .pc-only { display: inline-block; }
 
@@ -128,16 +134,14 @@
       td:last-child { border-bottom: none; padding-bottom: 0; }
       td::before { content: attr(data-label); font-size: 12px; color: #718096; font-weight: bold; }
       
-      /* Cột check và Tên nằm trên cùng */
       .td-check { width: 100%; border-bottom: 1px solid var(--border); padding-bottom: 12px; margin-bottom: 5px; display: flex; justify-content: space-between; align-items: center; }
       .td-check::before { display: none; }
       
-      /* TRÊN MOBILE: Ẩn cột tên PC, Mở cục tên Mobile */
       .pc-only-name { display: none !important; }
       .mobile-header { display: block; font-weight: 800; font-size: 16px; color: var(--primary); }
       .pc-only { display: none !important; }
       
-      /* 👉 ĐẨY CÁI NÀY VÀO BÊN TRONG KHỐI MOBILE (Đảo ngược lại: HIỆN Thanh nổi, ẨN Sidebar Duyệt) */
+      /* 👉 ĐẢO NGƯỢC CSS TRÊN MOBILE: Hiện Thanh nổi, Ẩn Sidebar Duyệt */
       #floatingApproveBar { display: flex !important; }
       .sidebar-approve-panel { display: none !important; }
     }
@@ -151,7 +155,6 @@
     #loading { flex-direction: column; color: white; font-weight: bold; z-index: 10000; }
     .spinner { border: 4px solid rgba(255,255,255,0.3); border-top: 4px solid white; border-radius: 50%; width: 48px; height: 48px; animation: spin 1s linear infinite; margin-bottom: 15px; }
     @keyframes spin { 100% { transform: rotate(360deg); } }
-    
   </style>
 </head>
 <body>
@@ -234,7 +237,7 @@
                 <th>勤務地</th>
                 <th class="pc-only-name">スタッフ名</th>
                 <th>出退勤</th>
-                <th>休憩</th> <!-- 👉 CHÈN THÊM CỘT NÀY -->
+                <th>休憩</th> 
                 <th>実働</th>
                 <th>交通費</th>
                 <th style="text-align:center;">操作</th>
@@ -273,6 +276,7 @@
       </div>
     </div>
   </div>
+
   <!-- MODAL SỬA GIỜ CHO KHÁCH HÀNG -->
   <div id="modalEditTime" class="overlay" onclick="closeModalOutside(event, 'modalEditTime')">
     <div class="modal">
@@ -304,7 +308,7 @@
     </div>
   </div>
 
-  <!-- THANH NỔI DƯỚI ĐÁY (CHỈ HIỆN KHI CÓ CHECKBOX ĐƯỢC CHỌN) -->
+  <!-- THANH NỔI DƯỚI ĐÁY BẢN MOBILE -->
   <div id="floatingApproveBar" style="position:fixed; bottom:-100px; left:50%; transform:translateX(-50%); width:90%; max-width:400px; background:var(--surface); border-radius:12px; box-shadow:0 5px 25px rgba(0,0,0,0.2); display:flex; justify-content:space-between; align-items:center; padding:15px 20px; transition:bottom 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index:9990;">
     <div style="font-size:14px; font-weight:bold; color:var(--primary);">
       <span id="floatCount" style="color:var(--accent); font-size:18px;">0</span> 件選択中
@@ -312,7 +316,7 @@
     <button class="btn btn-accent" style="width:auto; padding:0 25px; height:40px; margin:0;" onclick="openQuickApproveModal()">承認する</button>
   </div>
 
-  <!-- POPUP NHẬP TÊN GỌN NHẸ -->
+  <!-- POPUP NHẬP TÊN GỌN NHẸ (DÙNG CHO MOBILE) -->
   <div id="modalQuickApprove" class="overlay" onclick="closeModalOutside(event, 'modalQuickApprove')">
     <div class="modal" style="text-align:center; padding: 25px;">
       <h3 style="margin-bottom:10px;">一括承認</h3>
@@ -328,7 +332,7 @@
   </div>
   
   <script>
-    // 👉 NHỚ DÁN LẠI CÁI LINK API VÀO ĐÂY NHÉ!
+    // 👉 LINK API BACKEND KHÁCH HÀNG 
     const GAS_API_URL = "https://script.google.com/macros/s/AKfycbwEy1ArOJjCE4joiEErl33EjMgH_4tcQc-5BYD8DVzvyBnDZSiqwIu2e0HbcS2FGPlB/exec"; 
 
     let clientToken = sessionStorage.getItem('alescoClientToken');
@@ -348,11 +352,10 @@
         showView('viewLogin');
       }
 
-      // 👇 THÊM ĐOẠN NÀY ĐỂ BẮT SỰ KIỆN PHÍM ENTER 👇
+      // Enter key for Login
       const idInput = document.getElementById('inpLoginId');
       const passInput = document.getElementById('inpLoginPass');
 
-      // Nếu đang đứng ở ô ID mà bấm Enter thì tự động nhảy sang ô Pass
       idInput.addEventListener("keyup", function(event) {
         if (event.key === "Enter") {
           event.preventDefault();
@@ -360,14 +363,12 @@
         }
       });
 
-      // Nếu đang đứng ở ô Pass mà bấm Enter thì tự động bấm nút Login
       passInput.addEventListener("keyup", function(event) {
         if (event.key === "Enter") {
           event.preventDefault();
-          doLogin(); // Gọi thẳng hàm đăng nhập
+          doLogin(); 
         }
       });
-      // 👆 KẾT THÚC ĐOẠN THÊM VÀO 👆
     });
 
     function toggleMobileMenu() { document.getElementById('mobileMenu').classList.toggle('show'); }
@@ -459,13 +460,13 @@
 
         renderTable();
 
-        // 👇 THÊM ĐOẠN NÀY ĐỂ AUTOFILL TÊN LÊN SIDEBAR CỦA PC
+        // TỰ ĐỘNG ĐIỀN TÊN VÀO SIDEBAR PC
         const savedName = localStorage.getItem('alescoApproverName');
         if (savedName && document.getElementById('inpApprover')) {
            document.getElementById('inpApprover').value = savedName;
-        
+        }
       }
-    }
+    } // 👉 ĐÃ FIX LỖI THIẾU DẤU } Ở ĐÂY
 
     function renderTable() {
       const tbody = document.getElementById('tableBody');
@@ -490,7 +491,7 @@
         let fbClass = r.feedbackMessage ? 'has-note' : '';
         let safeMsg = r.feedbackMessage ? r.feedbackMessage.replace(/"/g, '&quot;') : '';
 
-        // 👉 FORMAT GIỜ THỰC TẾ (Đã trừ giờ nghỉ từ Backend)
+        // Format giờ làm
         let hoursStr = "00:00";
         if (typeof r.workHours === 'number' && r.workHours > 0) {
             let h = Math.floor(r.workHours);
@@ -498,7 +499,7 @@
             hoursStr = String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');
         }
 
-        // 👉 FORMAT GIỜ NGHỈ (Từ Phút -> HH:mm)
+        // Format giờ nghỉ
         let breakStr = "00:00";
         if (typeof r.breakMins === 'number' && r.breakMins > 0) {
             let bh = Math.floor(r.breakMins / 60);
@@ -523,24 +524,21 @@
             <td data-label="日付"><strong>${r.date}</strong></td>
             <td data-label="勤務地">${r.locationName}</td>
             <td data-label="スタッフ名" class="pc-only-name"><strong>${r.empName}</strong></td>
-            <!-- 👇 THAY THẾ 4 CỘT NÀY 👇 -->
             <td data-label="出退勤"><strong>${r.checkIn} ~ ${r.checkOut}</strong></td>
             <td data-label="休憩"><strong>${breakStr}</strong></td>
             <td data-label="実働"><strong>${hoursStr}</strong></td>
             <td data-label="交通費"><strong>¥${r.transportCost.toLocaleString()}</strong></td>
-            <!-- 👆 KẾT THÚC THAY THẾ 👆 -->
             <td data-label="操作" style="text-align:center; min-width: 80px;">
                <div style="display:flex; justify-content:center; align-items:center; gap:12px;">
                  
-                 <!-- EMOJI BÚT CHÌ (LUÔN HIỆN, KIỂM TRA DUYỆT Ở JS) -->
+                 <!-- EMOJI BÚT CHÌ (KIỂM TRA BẰNG JS KHI CLICK) -->
                  <span class="feedback-icon" style="font-size: 18px;" onclick="openEditTimeModal('${r.recordId}', '${r.checkIn}', '${r.checkOut}', '${r.breakMins}', ${isAppr})" title="打刻を修正する">✏️</span>
                  
-                 <!-- NÚT MESSAGE -->
+                 <!-- NÚT MESSAGE (BẬT VĨNH VIỄN) -->
                  <span class="feedback-icon ${fbClass}" onclick="openFeedback('${r.recordId}', '${safeMsg}', ${isAppr})" title="連絡事項">${fbIcon}</span>
                
                </div>
             </td>
-            <!-- 👆 KẾT THÚC CỘT MỚI 👆 -->
           </tr>
         `;
       });
@@ -554,21 +552,26 @@
 
     function checkApproveReady() {
       const checkedCount = document.querySelectorAll('.chk-row:checked').length;
+      const approverName = document.getElementById('inpApprover').value.trim();
+      const btn = document.getElementById('btnApprove');
+      
+      document.getElementById('lblApproveCount').innerText = checkedCount;
+      btn.disabled = !(checkedCount > 0 && approverName !== "");
+
+      // Đẩy số đếm vào thanh nổi Mobile
       const floatBar = document.getElementById('floatingApproveBar');
-      
-      // Đẩy số đếm vào thanh nổi
-      document.getElementById('floatCount').innerText = checkedCount;
-      
-      // Trượt lên nếu có chọn, tụt xuống nếu bỏ chọn hết
-      if (checkedCount > 0) {
-        floatBar.style.bottom = "20px"; // Nổi lên cách đáy 20px
-      } else {
-        floatBar.style.bottom = "-100px"; // Tụt xuống giấu đi
+      if (floatBar) {
+          document.getElementById('floatCount').innerText = checkedCount;
+          if (checkedCount > 0) {
+            floatBar.style.bottom = "20px"; // Trượt lên
+          } else {
+            floatBar.style.bottom = "-100px"; // Tụt xuống
+          }
       }
     }
 
     function openQuickApproveModal() {
-      // Tự động lấy tên cũ đã lưu nhét vào ô
+      // Tự động lấy tên cũ
       const savedName = localStorage.getItem('alescoApproverName');
       if (savedName) document.getElementById('inpQuickApprover').value = savedName;
       
@@ -579,19 +582,18 @@
       const name = document.getElementById('inpQuickApprover').value.trim();
       if (!name) { alert("承認者名を入力してください。"); return; }
       
-      // Lưu tên vào máy để lần sau đéo phải gõ nữa
       localStorage.setItem('alescoApproverName', name);
 
       const cbs = document.querySelectorAll('.chk-row:checked');
       const ids = Array.from(cbs).map(cb => cb.getAttribute('data-id'));
       
-      closeModal('modalQuickApprove'); // Tắt popup ngay cho mượt
+      closeModal('modalQuickApprove'); 
 
       const res = await callAPI("saveClientApproval", [ids, name], "承認処理中...");
       if (res.result && res.result.success) { 
         alert("承認が完了しました。"); 
         document.getElementById('chkSelectAll').checked = false;
-        checkApproveReady(); // Tụt thanh nổi xuống
+        checkApproveReady(); 
         fetchData(); 
       } else { 
         alert("エラー: " + (res.result ? res.result.message : "不明なエラー")); 
@@ -613,7 +615,6 @@
       document.getElementById('hdnRecordId').value = id; 
       document.getElementById('inpFeedback').value = msg; 
       
-      // 👉 LUÔN CHO PHÉP GÕ VÀ GỬI TIN NHẮN (BẤT KỂ ĐÃ DUYỆT HAY CHƯA)
       document.getElementById('inpFeedback').disabled = false;
       document.getElementById('btnSaveFeedback').style.display = 'block'; 
       
@@ -641,7 +642,6 @@
       const filtered = currentData.filter(r => locFilter === 'ALL' || r.locationName === locFilter);
       if (filtered.length === 0) return alert('エクスポートするデータがありません。');
 
-      // 👉 CẬP NHẬT HEADER: Thêm chữ '休憩' vào giữa '退勤' và '実働'
       let csv = "\uFEFF名前,日付,勤務地,出勤,退勤,休憩,実働,交通費(円),連絡事項,承認者\n";
       
       filtered.forEach(r => {
@@ -650,7 +650,6 @@
         let fb = `"${r.feedbackMessage.replace(/"/g, '""')}"`;
         let appr = r.isApproved ? `"${r.approverName.replace(/"/g, '""')}"` : "";
 
-        // Format giờ làm
         let hoursStr = "00:00";
         if (typeof r.workHours === 'number' && r.workHours > 0) {
             let h = Math.floor(r.workHours);
@@ -658,7 +657,6 @@
             hoursStr = String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');
         }
 
-        // 👉 FORMAT GIỜ NGHỈ
         let breakStr = "00:00";
         if (typeof r.breakMins === 'number' && r.breakMins > 0) {
             let bh = Math.floor(r.breakMins / 60);
@@ -666,7 +664,6 @@
             breakStr = String(bh).padStart(2, '0') + ':' + String(bm).padStart(2, '0');
         }
 
-        // 👉 CHÈN BIẾN breakStr VÀO CHUỖI CSV
         csv += `${name},${r.date},${loc},${r.checkIn},${r.checkOut},${breakStr},${hoursStr},${r.transportCost},${fb},${appr}\n`;
       });
 
@@ -678,24 +675,15 @@
       a.click();
     }
 
-    // =====================================
-    // LOGIC SỬA GIỜ DÀNH CHO KHÁCH HÀNG
-    // =====================================
     function openEditTimeModal(id, inTime, outTime, breakMins, isApproved) {
-      
-      // CHỐT CHẶN: NẾU ĐÃ DUYỆT -> HIỆN THÔNG BÁO VÀ CHẶN LẠI
       if (isApproved) {
         alert("既に承認済みの記録です。\n打刻の修正が必要な場合は、アレスコ担当者までご連絡ください。");
         return; 
       }
-
       document.getElementById('hdnEditRecordId').value = id; 
-      
-      // Xử lý cái "---" (Chưa quẹt) thành rỗng để nhét vào ô Time
       document.getElementById('inpEditIn').value = (inTime === "---") ? "" : inTime;
       document.getElementById('inpEditOut').value = (outTime === "---") ? "" : outTime;
       document.getElementById('inpEditBreak').value = breakMins || 0; 
-      
       showModal('modalEditTime');
     }
 
@@ -708,12 +696,11 @@
       if (!newIn) {
         alert("出勤時間を入力してください。"); return;
       }
-
       const res = await callAPI("updateClientAttendanceRecord", [id, newIn, newOut, newBreak], "保存中...");
       
       if (res.result && res.result.success) { 
         closeModal('modalEditTime'); 
-        fetchData(); // Tải lại bảng ngay lập tức
+        fetchData(); 
       } else { 
         alert("エラーが発生しました: " + (res.result ? res.result.message : "")); 
       }
