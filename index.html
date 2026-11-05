@@ -180,11 +180,13 @@
     <div class="top-nav">
       <div class="client-title"><span id="txtClientName">---</span></div>
       <div class="nav-actions">
+        <button class="btn btn-outline btn-sm" onclick="exportCSV()">CSV出力</button>
         <button class="btn btn-outline btn-sm" onclick="showModal('modalPass')">パスワード変更</button>
         <button class="btn btn-outline btn-sm" onclick="doLogout()">ログアウト</button>
       </div>
       <button class="menu-toggle" onclick="toggleMobileMenu()">☰</button>
       <div id="mobileMenu" class="mobile-menu">
+        <button onclick="toggleMobileMenu(); exportCSV();">📥 CSV出力</button>
         <button onclick="toggleMobileMenu(); showModal('modalPass');">🔐 パスワード変更</button>
         <button onclick="toggleMobileMenu(); doLogout();">🚪 ログアウト</button>
       </div>
@@ -201,7 +203,7 @@
           </div>
         </div>
         <div class="filter-drawer-btn" id="btnToggleSidebar" onclick="toggleSidebar()">
-          <span>🔍 絞り込みと一括承認</span>
+          <span>条件設定</span>
         </div>
         <div class="sidebar-content" id="sidebarContent">
           <div class="control-box">
@@ -220,9 +222,6 @@
             <div style="font-size:12px; margin-bottom:8px; font-weight:bold; color:#4A5568;">承認者名を入力：</div>
             <input type="text" id="inpApprover" placeholder="例: 山田 太郎" oninput="checkApproveReady()">
             <button id="btnApprove" class="btn btn-accent" disabled onclick="doApprove()">選択項目を承認 (<span id="lblApproveCount">0</span>)</button>
-          </div>
-          <div class="control-box">
-            <button class="btn btn-outline" onclick="exportCSV()">📥 CSVダウンロード</button>
           </div>
         </div>
       </div>
