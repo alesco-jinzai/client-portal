@@ -148,6 +148,10 @@
     #loading { flex-direction: column; color: white; font-weight: bold; z-index: 10000; }
     .spinner { border: 4px solid rgba(255,255,255,0.3); border-top: 4px solid white; border-radius: 50%; width: 48px; height: 48px; animation: spin 1s linear infinite; margin-bottom: 15px; }
     @keyframes spin { 100% { transform: rotate(360deg); } }
+
+    .btn-edit-client { background:none; border:1px solid #CBD5E0; border-radius:4px; padding:4px 10px; font-size:11px; font-weight:bold; color:var(--primary-light); cursor:pointer; transition:0.2s;}
+    .btn-edit-client:hover { background:#EBF8FF; border-color:var(--primary-light);}
+    
   </style>
 </head>
 <body>
@@ -233,7 +237,7 @@
                 <th>休憩</th> <!-- 👉 CHÈN THÊM CỘT NÀY -->
                 <th>実働</th>
                 <th>交通費</th>
-                <th style="text-align:center;">連絡</th>
+                <th style="text-align:center;">操作</th>
               </tr>
             </thead>
             <tbody id="tableBody"></tbody>
@@ -269,7 +273,36 @@
       </div>
     </div>
   </div>
-
+  <!-- MODAL SỬA GIỜ CHO KHÁCH HÀNG -->
+  <div id="modalEditTime" class="overlay" onclick="closeModalOutside(event, 'modalEditTime')">
+    <div class="modal">
+      <h3>打刻修正</h3>
+      <p style="font-size:13px; color:#718096; margin-bottom:15px;">従業員の出退勤時間および休憩時間を修正できます。<br>※修正履歴はシステムに記録されます。</p>
+      
+      <div class="input-group" style="display:flex; gap:10px;">
+        <div style="flex:1;">
+          <label>出勤時間</label>
+          <input type="time" id="inpEditIn">
+        </div>
+        <div style="flex:1;">
+          <label>退勤時間</label>
+          <input type="time" id="inpEditOut">
+        </div>
+      </div>
+      
+      <div class="input-group">
+        <label>休憩 (分)</label>
+        <input type="number" id="inpEditBreak" placeholder="例: 60">
+      </div>
+      
+      <input type="hidden" id="hdnEditRecordId">
+      
+      <div style="display:flex; gap:12px; margin-top:20px;">
+        <button class="btn btn-outline" onclick="closeModal('modalEditTime')">キャンセル</button>
+        <button id="btnSaveTime" class="btn btn-primary" onclick="saveClientEditTime()">保存する</button>
+      </div>
+    </div>
+  </div>
   <script>
     // 👉 NHỚ DÁN LẠI CÁI LINK API VÀO ĐÂY NHÉ!
     const GAS_API_URL = "https://script.google.com/macros/s/AKfycbwEy1ArOJjCE4joiEErl33EjMgH_4tcQc-5BYD8DVzvyBnDZSiqwIu2e0HbcS2FGPlB/exec"; 
@@ -467,8 +500,14 @@
             
             <td data-label="実働"><strong>${hoursStr}</strong></td>
             <td data-label="交通費">¥${r.transportCost.toLocaleString()}</td>
-            <td data-label="連絡" style="text-align:center;">
-               <span class="feedback-icon ${fbClass}" onclick="openFeedback('${r.recordId}', '${safeMsg}', ${isAppr})" title="連絡事項">${fbIcon}</span>
+            <td data-label="操作" style="text-align:center; min-width: 90px;">
+               <div style="display:flex; justify-content:center; align-items:center; gap:12px;">
+                 <!-- NÚT SỬA (CHỈ HIỆN KHI CHƯA DUYỆT) -->
+                 ${!isAppr ? `<button class="btn-edit-client" onclick="openEditTimeModal('${r.recordId}', '${r.checkIn}', '${r.checkOut}', '${r.breakMins}')">修正</button>` : `<span style="width:46px;"></span>`}
+                 
+                 <!-- NÚT MESSAGE (GIỮ NGUYÊN) -->
+                 <span class="feedback-icon ${fbClass}" onclick="openFeedback('${r.recordId}', '${safeMsg}', ${isAppr})" title="連絡事項">${fbIcon}</span>
+               </div>
             </td>
           </tr>
         `;
@@ -562,6 +601,40 @@
       a.click();
     }
 
+    // =====================================
+    // LOGIC SỬA GIỜ DÀNH CHO KHÁCH HÀNG
+    // =====================================
+    function openEditTimeModal(id, inTime, outTime, breakMins) {
+      document.getElementById('hdnEditRecordId').value = id; 
+      
+      // Xử lý cái "---" (Chưa quẹt) thành rỗng để nhét vào ô Time
+      document.getElementById('inpEditIn').value = (inTime === "---") ? "" : inTime;
+      document.getElementById('inpEditOut').value = (outTime === "---") ? "" : outTime;
+      document.getElementById('inpEditBreak').value = breakMins || 0; 
+      
+      showModal('modalEditTime');
+    }
+
+    async function saveClientEditTime() {
+      const id = document.getElementById('hdnEditRecordId').value; 
+      const newIn = document.getElementById('inpEditIn').value;
+      const newOut = document.getElementById('inpEditOut').value;
+      const newBreak = document.getElementById('inpEditBreak').value;
+      
+      if (!newIn) {
+        alert("出勤時間を入力してください。"); return;
+      }
+
+      const res = await callAPI("updateClientAttendanceRecord", [id, newIn, newOut, newBreak], "保存中...");
+      
+      if (res.result && res.result.success) { 
+        closeModal('modalEditTime'); 
+        fetchData(); // Tải lại bảng ngay lập tức
+      } else { 
+        alert("エラーが発生しました: " + (res.result ? res.result.message : "")); 
+      }
+    }
+    
     function showModal(id) { document.getElementById(id).style.display = 'flex'; }
     function closeModal(id) { document.getElementById(id).style.display = 'none'; if (id === 'modalPass') { document.getElementById('inpOldPass').value = ''; document.getElementById('inpNewPass').value = ''; document.getElementById('errPass').style.display = 'none'; } }
     function closeModalOutside(e, id) { if (e.target.id === id) closeModal(id); }
