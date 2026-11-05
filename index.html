@@ -85,12 +85,49 @@
     #lblMonth { font-weight: 700; font-size: 16px; }
     select.filter-sel { width: 100%; height: 48px; padding: 0 15px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg); font-size: 14px; font-weight: bold; outline: none;}
 
-    /* --- APPROVAL SECTION --- */
-    .approve-panel { background: #EBF8FF; border: 1px solid #BEE3F8; border-radius: 10px; padding: 15px; }
-    .checkbox-master { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; padding-bottom: 12px; border-bottom: 1px dashed #BEE3F8; cursor: pointer; }
-    .checkbox-master input { width: 18px; height: 18px; cursor: pointer; }
-    .checkbox-master label { font-size: 14px; font-weight: 700; color: var(--primary-light); cursor: pointer; }
-    .approve-panel input[type="text"] { width: 100%; height: 45px; padding: 0 15px; border-radius: 8px; border: 1px solid #BEE3F8; margin-bottom: 15px; font-size: 14px; outline:none;}
+    /* --- APPROVAL SECTION (ĐÃ REDESIGN) --- */
+    .approve-panel { 
+      background: #F0F9FF; /* Nền xanh siêu nhạt, sang trọng */
+      border: 1px solid #BAE6FD; 
+      border-radius: 12px; 
+      padding: 20px; /* Tăng độ thở cho nội dung */
+      box-shadow: 0 4px 15px rgba(2, 132, 199, 0.05); /* Đổ bóng nhẹ */
+    }
+    
+    .approve-panel h3 {
+      font-size: 15px; color: #0369A1; margin: 0 0 15px 0; font-weight: 800;
+      display: flex; align-items: center; gap: 8px;
+    }
+    
+    .checkbox-master { 
+      display: flex; align-items: center; gap: 10px; margin-bottom: 15px; 
+      padding-bottom: 15px; border-bottom: 1px dashed #7DD3FC; cursor: pointer; 
+    }
+    .checkbox-master input[type="checkbox"] { 
+      width: 20px; height: 20px; cursor: pointer; margin: 0; accent-color: #0284C7;
+    }
+    .checkbox-master span { 
+      font-size: 14px; font-weight: 700; color: #0284C7; user-select: none;
+    }
+    
+    .approve-panel .input-label {
+      font-size: 12px; font-weight: 700; color: #475569; margin-bottom: 8px;
+    }
+    
+    .approve-panel input[type="text"] { 
+      width: 100%; height: 48px; padding: 0 15px; border-radius: 8px; 
+      border: 1px solid #CBD5E1; background: #FFFFFF; margin-bottom: 20px; 
+      font-size: 14px; font-weight: bold; outline: none; transition: 0.2s; box-sizing: border-box;
+    }
+    .approve-panel input[type="text"]:focus {
+      border-color: #0284C7; box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.1);
+    }
+    
+    /* Nút bấm khi bị khóa (chưa chọn) sẽ thành màu xám cho đỡ chói */
+    #btnApprove { width: 100%; height: 48px; font-size: 15px; }
+    #btnApprove:disabled { 
+      background: #E2E8F0; color: #94A3B8; border: 1px solid #CBD5E1; cursor: not-allowed;
+    }
 
     /* --- DATA TABLE --- */
     .data-scroll { flex: 1; overflow-y: auto; padding: 0; }
@@ -217,11 +254,19 @@
             </select>
           </div>
           <div class="control-box approve-panel sidebar-approve-panel">
-            <h3 style="color:var(--primary-light);">一括承認</h3>
-            <label class="checkbox-master"><input type="checkbox" id="chkSelectAll" onchange="toggleSelectAll()"><span>未承認をすべて選択</span></label>
-            <div style="font-size:12px; margin-bottom:8px; font-weight:bold; color:#4A5568;">承認者名を入力：</div>
+            <h3>✓ 一括承認</h3>
+            
+            <label class="checkbox-master">
+              <input type="checkbox" id="chkSelectAll" onchange="toggleSelectAll()">
+              <span>未承認をすべて選択</span>
+            </label>
+            
+            <div class="input-label">承認者名を入力：</div>
             <input type="text" id="inpApprover" placeholder="例: 山田 太郎" oninput="checkApproveReady()">
-            <button id="btnApprove" class="btn btn-accent" disabled onclick="doApprove()">選択項目を承認 (<span id="lblApproveCount">0</span>)</button>
+            
+            <button id="btnApprove" class="btn btn-accent" disabled onclick="doApprove()">
+              選択項目を承認 (<span id="lblApproveCount">0</span>)
+            </button>
           </div>
         </div>
       </div>
