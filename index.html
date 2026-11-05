@@ -136,6 +136,10 @@
       .pc-only-name { display: none !important; }
       .mobile-header { display: block; font-weight: 800; font-size: 16px; color: var(--primary); }
       .pc-only { display: none !important; }
+      
+      /* 👉 ĐẨY CÁI NÀY VÀO BÊN TRONG KHỐI MOBILE (Đảo ngược lại: HIỆN Thanh nổi, ẨN Sidebar Duyệt) */
+      #floatingApproveBar { display: flex !important; }
+      .sidebar-approve-panel { display: none !important; }
     }
 
     /* --- MODALS --- */
@@ -207,7 +211,7 @@
               <option value="ALL">すべてのスタッフ</option>
             </select>
           </div>
-          <div class="control-box approve-panel">
+          <div class="control-box approve-panel sidebar-approve-panel">
             <h3 style="color:var(--primary-light);">一括承認</h3>
             <label class="checkbox-master"><input type="checkbox" id="chkSelectAll" onchange="toggleSelectAll()"><span>未承認をすべて選択</span></label>
             <div style="font-size:12px; margin-bottom:8px; font-weight:bold; color:#4A5568;">承認者名を入力：</div>
@@ -454,6 +458,12 @@
         if (uniqueEmps.includes(oldEmp)) selEmp.value = oldEmp;
 
         renderTable();
+
+        // 👇 THÊM ĐOẠN NÀY ĐỂ AUTOFILL TÊN LÊN SIDEBAR CỦA PC
+        const savedName = localStorage.getItem('alescoApproverName');
+        if (savedName && document.getElementById('inpApprover')) {
+           document.getElementById('inpApprover').value = savedName;
+        
       }
     }
 
@@ -591,6 +601,7 @@
     async function doApprove() {
       const cbs = document.querySelectorAll('.chk-row:checked');
       const name = document.getElementById('inpApprover').value.trim();
+      localStorage.setItem('alescoApproverName', name);
       const ids = Array.from(cbs).map(cb => cb.getAttribute('data-id'));
       if (!confirm(`${ids.length} 件を「${name}」様のお名前で承認します。よろしいですか？`)) return;
       const res = await callAPI("saveClientApproval", [ids, name], "承認処理中...");
